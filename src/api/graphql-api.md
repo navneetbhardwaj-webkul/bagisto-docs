@@ -2,111 +2,219 @@
 
 Bagisto's GraphQL API delivers a modern, flexible approach to e-commerce data access. Built on Laravel Lighthouse, it provides efficient querying capabilities perfect for headless commerce, mobile apps, and modern frontend frameworks.
 
-## 🚀 Quick Start
+## 🚀 Quick Navigation
 
-### Live Demo
+Choose your next step:
 
-Experience the power of GraphQL with our interactive demo:
+| Documentation | Description |
+|---|---|
+| 📖 [Introduction](/api/graphql/introduction) | Get started with GraphQL basics and API overview |
+| 🔐 [Authentication](/api/graphql/authentication) | Learn all authentication methods and token management |
+| 🛍️ [Shop API](/api/graphql/shop-api) | Customer-facing e-commerce operations reference |
+| 👨‍💼 [Admin API](/api/graphql/admin-api) | Administrative operations and management reference |
+| 🎮 [Playground Guide](/api/graphql/playground) | Interactive testing with sample queries |
+| 💻 [Integration Guides](/api/graphql/integrations) | Code examples for multiple programming languages |
+| 💡 [Best Practices](/api/graphql/best-practices) | Performance, security, and testing best practices |
 
-🌐 [**GraphQL API Demo**](https://demo.bagisto.com/mobikul-common/graphiql) - Test queries and explore the schema in real-time
+## 🌐 Live Playground
 
-::: tip Interactive Playground
-The demo includes GraphiQL playground where you can write queries, explore documentation, and see real-time results.
-:::
+Test queries instantly without any setup:
 
-## 📦 Installation
+🎮 **[GraphQL Playground](https://demo.bagisto.com/api/graphiql)** - Interactive query builder with schema explorer
 
-### Step 1: Install the Package
+## Key Features
 
-Install the GraphQL API package via Composer:
+✨ **Developer Friendly**
+- Interactive GraphiQL playground
+- Auto-complete and schema documentation
+- Copy as cURL functionality
+- Real-time error reporting
 
-```bash
-composer require bagisto/graphql-api 
+🚀 **High Performance**
+- Request only the data you need
+- Cursor-based pagination
+- Query optimization tools
+- Caching support
+
+🔒 **Secure**
+- Multiple authentication methods
+- Guest checkout support
+- Token-based security
+- Rate limiting
+
+📱 **Mobile Ready**
+- Optimized for low bandwidth
+- Small payload sizes
+- Perfect for native apps
+
+## What Can You Build?
+
+- 🛒 Headless storefronts and e-commerce sites
+- 📱 Mobile apps (iOS & Android)
+- 🔄 Third-party integrations and marketplaces
+- 📊 Analytics dashboards
+- ⚡ Progressive Web Apps (PWA)
+- 🤖 AI-powered shopping assistants
+
+## Quick Start
+
+### 1. Choose Your Path
+
+**For Building Customer-Facing Apps:**
+- Start with [Shop API Reference](/api/graphql/shop-api)
+- Learn [Authentication Methods](/api/graphql/authentication)
+
+**For Admin Dashboards:**
+- Start with [Admin API Reference](/api/graphql/admin-api)
+- Review [Permission Requirements](/api/graphql/admin-api#permission--role-management)
+
+**For Your Programming Language:**
+- Find your language in [Integration Guides](/api/graphql/integrations)
+- Copy-paste code examples and adapt
+
+### 2. Test in Playground
+
+- Visit [GraphQL Playground](https://demo.bagisto.com/api/graphiql)
+- Try [Sample Queries](/api/graphql/playground#quick-start-queries)
+- Explore the [Schema](/api/graphql/playground#schema-explorer)
+
+### 3. Implement in Your App
+
+- Follow the [Authentication Guide](/api/graphql/authentication)
+- Use examples from [Integration Guides](/api/graphql/integrations)
+- Apply [Best Practices](/api/graphql/best-practices)
+
+## Documentation Structure
+
+### Core Documentation
+1. **[Introduction](/api/graphql/introduction)** - GraphQL fundamentals, setup, and endpoints
+2. **[Authentication](/api/graphql/authentication)** - All auth methods (guest, customer, admin)
+3. **[Shop API](/api/graphql/shop-api)** - Complete Shop API with all queries and mutations
+
+### Advanced Documentation
+4. **[Admin API](/api/graphql/admin-api)** - Admin operations for management tasks
+5. **[Playground Guide](/api/graphql/playground)** - Interactive testing with sample queries
+6. **[Integration Guides](/api/graphql/integrations)** - Code examples for:
+   - JavaScript / Node.js / React / Next.js
+   - Python / Django
+   - PHP / Laravel
+   - Ruby / Rails
+   - Go
+   - Java
+
+### Best Practices
+7. **[Best Practices](/api/graphql/best-practices)** - Performance optimization, security, testing, debugging
+
+## Common Use Cases
+
+### Building a Headless Storefront
+```
+1. Get Products → [Shop API - Products](/api/graphql/shop-api#products)
+2. Manage Cart → [Shop API - Shopping Cart](/api/graphql/shop-api#shopping-cart)
+3. Checkout → [Shop API - Checkout](/api/graphql/shop-api#checkout)
+4. Learn Auth → [Authentication Guide](/api/graphql/authentication)
 ```
 
-### Step 2: Configure Middleware
-
-Update your `bootstrap/app.php` file to ensure proper session handling:
-
-```php
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-
-return Application::configure(basePath: dirname(__DIR__))
-   ->withMiddleware(function (Middleware $middleware) {
-      // ... rest of middleware setup
-
-      /**
-       * Remove session and cookie middleware from the 'web' middleware group.
-       */
-      $middleware->removeFromGroup('web', [StartSession::class, AddQueuedCookiesToResponse::class]);
-
-      /**
-       * Adding session and cookie middleware globally to apply across non-web routes (e.g. GraphQL)
-       */
-      $middleware->append([StartSession::class, AddQueuedCookiesToResponse::class]);
-   })
-   // ... rest of configuration
+### Building a Mobile App
+```
+1. Learn Guest Auth → [Authentication - Guest](/api/graphql/authentication#1-guest-checkout-authentication)
+2. Browse Products → [Shop API - Products](/api/graphql/shop-api#products)
+3. Integrate Language → [Integration Guides](/api/graphql/integrations)
+4. Apply Best Practices → [Best Practices](/api/graphql/best-practices)
 ```
 
-::: warning Important Configuration
-This middleware configuration ensures sessions work properly with GraphQL endpoints, which is essential for authentication and cart management.
-:::
-
-### Step 3: Environment Configuration
-
-Add the following JWT settings to your `.env` file:
-
-```properties
-# JWT Configuration for GraphQL API
-JWT_TTL=525600
-JWT_SHOW_BLACKLIST_EXCEPTION=true
-
-# API Key for mobile/frontend authentication
-MOBIKUL_API_KEY=your-secure-api-key-here
+### Building an Admin Dashboard
+```
+1. Admin Login → [Authentication - Admin](/api/graphql/authentication#3-admin-authentication)
+2. Manage Data → [Admin API Reference](/api/graphql/admin-api)
+3. Optimize Performance → [Best Practices - Performance](/api/graphql/best-practices#performance-optimization)
+4. Implement Testing → [Best Practices - Testing](/api/graphql/best-practices#testing)
 ```
 
-::: tip Security Best Practice
-Generate a strong, unique API key for production environments. This key should be kept secure and only shared with your development team.
-:::
-
-### Step 4: Install and Publish Assets
-
-Run the installation command to set up configurations:
-
-```bash
-php artisan bagisto-graphql:install
+### Building a Third-Party Integration
+```
+1. Choose Auth Method → [Authentication Guide](/api/graphql/authentication)
+2. Decide Shop or Admin → [Shop API](/api/graphql/shop-api) or [Admin API](/api/graphql/admin-api)
+3. Select Language → [Integration Guides](/api/graphql/integrations)
+4. Handle Errors → [Best Practices - Error Handling](/api/graphql/best-practices#error-handling)
 ```
 
-This command will:
-- Publish GraphQL schema files
-- Set up authentication routes
-- Configure GraphiQL playground
+## API Endpoints
 
-## 🔧 Testing Your Setup
+| Endpoint | Purpose | Authentication |
+|----------|---------|-----------------|
+| `/api/graphql` | Main GraphQL API | Optional (Shop) / Required (Admin) |
+| `/api/graphiql` | GraphiQL Playground | None |
+| `/api/sandbox` | Apollo Sandbox UI | None |
 
-### GraphiQL Playground
+## Popular Queries
 
-Access the interactive GraphQL playground:
-
+### Get Products
+```graphql
+query {
+  products(channel: "default", first: 10) {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+    }
+  }
+}
 ```
-http://your-domain.com/graphiql
+
+[See more Shop API queries →](/api/graphql/shop-api#products)
+
+### Customer Login
+```graphql
+mutation {
+  createLogin(input: {
+    email: "user@example.com"
+    password: "password"
+  }) {
+    accessToken
+  }
+}
 ```
 
-### Direct API Endpoint
+[See more Auth examples →](/api/graphql/authentication#2-customer-authentication)
 
-For programmatic access or tools like Postman:
-
+### Create Order
+```graphql
+mutation {
+  createOrder(input: {
+    cartId: "CART_ID"
+    billingAddressId: "ADDRESS_ID"
+    shippingMethod: "flatrate_flatrate"
+    paymentMethod: "paypal"
+  }) {
+    order {
+      id
+      incrementId
+    }
+  }
+}
 ```
-http://your-domain.com/graphql
-```
 
-## 🔗 Next Steps
+[See complete checkout flow →](/api/graphql/shop-api#checkout)
 
-Ready to build with GraphQL? Here are your next steps:
+## Getting Help
 
-- 🎮 [**Try the Live Demo**](https://demo.bagisto.com/mobikul-common/graphiql)
+| Resource | Purpose |
+|----------|---------|
+| 🎮 [Live Playground](https://demo.bagisto.com/api/graphiql) | Test queries instantly |
+| 📚 [Documentation](/api/graphql/introduction) | Comprehensive guides |
+| 💬 [Community Forum](https://forums.bagisto.com) | Ask questions |
+| 🐛 [Issue Tracker](https://github.com/bagisto/bagisto/issues) | Report bugs |
+| 📧 [Contact Support](https://bagisto.com/en/contacts/) | Enterprise support |
 
-::: tip Need Traditional REST?
-If you prefer traditional REST endpoints, check out our [REST API](./rest-api) documentation.
-:::
+---
+
+**Start Building Today!**
+
+👉 **New to GraphQL?** Start with [Introduction](/api/graphql/introduction)
+
+👉 **Ready to code?** Choose your language in [Integration Guides](/api/graphql/integrations)
+
+👉 **Want to test?** Visit [GraphQL Playground](https://demo.bagisto.com/api/graphiql)

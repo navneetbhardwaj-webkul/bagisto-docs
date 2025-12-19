@@ -41,3 +41,479 @@
   padding: 18px;
   scale: 1.2;
 }
+
+/* ========================================
+   Professional Code Tabs (Shopify-Style)
+   ======================================== */
+
+.code-tabs-container {
+  margin: 24px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Tab Header with Buttons and Actions ===== */
+
+.tabs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-alt);
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 44px;
+}
+
+/* Language Tabs Structure */
+
+.language-tabs {
+  margin: 16px 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--vp-c-bg-soft);
+}
+
+.language-tabs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-alt);
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+.tabs-buttons {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.language-tab-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.language-tab-btn:hover {
+  border-color: var(--vp-c-brand);
+  color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+}
+
+.language-tab-btn.active {
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-brand);
+  color: white;
+  font-weight: 600;
+}
+
+.language-tab-content {
+  padding: 16px;
+}
+
+.code-block {
+  position: relative;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  overflow: auto;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.code-block code {
+  color: var(--vp-c-text-1);
+}
+
+.code-block code .keyword {
+  color: #6f42c1;
+  font-weight: 600;
+}
+
+:root.dark .code-block code .keyword {
+  color: #a78bfa;
+}
+
+.code-block code .type {
+  color: #d63384;
+}
+
+:root.dark .code-block code .type {
+  color: #f472b6;
+}
+
+/* Tab Buttons Row */
+
+.tabs-buttons-row {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+}
+
+.code-tab {
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  position: relative;
+  margin-bottom: -1px;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.code-tab:hover {
+  color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+}
+
+.code-tab.active {
+  color: var(--vp-c-brand);
+  border-bottom: 2px solid var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  font-weight: 600;
+}
+
+.code-tab:focus {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: -2px;
+}
+
+/* ===== Action Buttons (Right Side) ===== */
+
+.tabs-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.tabs-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.tabs-actions button svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.tabs-actions button:hover {
+  border-color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-brand);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.tabs-actions button:active {
+  transform: translateY(0);
+}
+
+.tabs-actions button.copied {
+  border-color: var(--vp-c-brand) !important;
+  background: var(--vp-c-brand) !important;
+  color: white !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+:root.dark .tabs-actions button.copied {
+  border-color: var(--vp-c-brand) !important;
+  background: var(--vp-c-brand) !important;
+}
+
+/* ===== Description Panel ===== */
+
+.description-panel {
+  padding: 12px 16px;
+  background: #fafaf9;
+  border-bottom: 1px solid var(--vp-c-divider);
+  font-size: 13px;
+  color: var(--vp-c-text-1);
+  line-height: 1.6;
+  border-radius: 0;
+}
+
+.description-panel p {
+  margin: 0;
+}
+
+/* Dark mode */
+:root.dark .description-panel {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ===== Content Wrapper ===== */
+
+.tabs-content-wrapper {
+  position: relative;
+  background: var(--vp-c-bg);
+  overflow: hidden;
+}
+
+/* Tab Content Panes */
+
+.tab-content {
+  display: none;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Code Block Styling */
+
+.tab-content pre {
+  margin: 0 !important;
+  border-radius: 6px;
+  background: var(--vp-code-block-bg) !important;
+  overflow: auto;
+  max-height: 500px;
+  padding: 0 !important;
+}
+
+.tab-content code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--vp-c-code);
+}
+
+/* Shiki syntax highlighting support */
+.tab-content .shiki {
+  background: var(--vp-code-block-bg) !important;
+  margin: 0 !important;
+  padding: 16px !important;
+  border-radius: 6px;
+}
+
+.tab-content .shiki code {
+  background: transparent !important;
+  color: inherit;
+}
+
+.tab-content .shiki span {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Light theme colors for Shiki */
+.tab-content .shiki.shiki-themes .line {
+  padding: 0 0;
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 1024px) {
+  .tabs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .code-tab {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 70px;
+  }
+
+  .tabs-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .tabs-actions button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .tab-content {
+    padding: 12px;
+  }
+
+  .tab-content pre {
+    max-height: 300px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .code-tab {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+
+  .tabs-buttons-row {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .tabs-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .tabs-actions button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .tab-content pre {
+    max-height: 250px;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .tab-content code {
+    font-size: 10px;
+  }
+}
+
+/* ===== Accessibility ===== */
+
+.code-tab:focus-visible {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: -2px;
+}
+
+.tabs-actions button:focus-visible {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: 2px;
+}
+
+/* ===== Dark Mode Support ===== */
+
+:root.dark .code-tabs-container {
+  background: var(--vp-c-bg-soft);
+}
+
+:root.dark .tabs-header {
+  background: var(--vp-c-bg-alt);
+  border-bottom-color: var(--vp-c-divider);
+}
+
+:root.dark .code-tab {
+  color: var(--vp-c-text-2);
+}
+
+:root.dark .code-tab:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+:root.dark .code-tab.active {
+  color: var(--vp-c-brand);
+  background: var(--vp-c-bg-soft);
+}
+
+:root.dark .tabs-actions button {
+  background: var(--vp-c-bg);
+  border-color: var(--vp-c-divider);
+}
+
+:root.dark .tabs-actions button:hover {
+  background: var(--vp-c-bg-soft);
+  border-color: var(--vp-c-brand);
+}
+
+/* ========================================
+   API Section Customizations
+   ======================================== */
+
+/* Hide outline/TOC for API pages */
+:where([data-path^="/api/"]) .VPDocAside {
+  display: none !important;
+}
+
+/* Hide spacer element in API pages - multiple selectors */
+:where([data-path^="/api/"]) .spacer,
+[data-path^="/api/"] .spacer,
+:where([data-path^="/api/"]) .VPSidebar .spacer {
+  display: none !important;
+}
+
+/* Wider content area when no outline */
+:where([data-path^="/api/"]) .VPDoc .DocContainer {
+  width: 100%;
+}
+
+/* Force aside container to 350px only for API pages */
+.aside-container{
+  width: 350px !important;
+  max-width: 350px !important;
+}
+
+
+/* Ensure ExamplesPanel takes full width */
+.examples-sidebar {
+  width: 100% !important;
+}
+
+/* Increase aside width globally for examples */
+.VPSidebar {
+  --sidebar-width: 550px;
+}
