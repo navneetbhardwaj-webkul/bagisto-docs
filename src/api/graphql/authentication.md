@@ -37,12 +37,12 @@ mutation {
 
 ### Using Guest Token
 
-Pass the token in the `X-Cart-Token` header for all subsequent requests:
+Pass the token as a Bearer token in the `Authorization` header for all subsequent requests:
 
 ```bash
 curl -X POST https://your-domain.com/api/graphql \
   -H "Content-Type: application/json" \
-  -H "X-Cart-Token: 550e8400-e29b-41d4-a716-446655440000" \
+  -H "Authorization: Bearer 550e8400-e29b-41d4-a716-446655440000" \
   -d '{
     "query": "query { cart { items { edges { node { id } } } } }"
   }'

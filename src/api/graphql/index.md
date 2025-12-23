@@ -18,7 +18,7 @@ The Shop API is designed for customer-facing applications like mobile apps, stor
 - **Checkout** - Complete checkout workflow
 - **Reviews** - Product reviews and ratings
 
-[Explore Shop API →](/api/graphql/shop/products)
+[Explore Shop API →](/api/graphql)
 
 ### 🔧 Admin API
 
@@ -33,7 +33,7 @@ The Admin API is for administrative and management applications. Full control ov
 - **Attributes** - Product attributes and attribute sets
 - **Reports** - Sales, product, customer, and inventory analytics
 
-[Explore Admin API →](/api/graphql/admin/products)
+[Explore Admin API →](/api/graphql)
 
 ## Getting Started
 
@@ -47,7 +47,111 @@ Choose the appropriate authentication method for your use case:
 
 [Learn about Authentication →](/api/graphql/authentication)
 
-### 2. Exploring the API
+### 2. Cursor Pagination
+
+Bagisto GraphQL API uses cursor-based pagination for efficient collection queries. This method is ideal for handling large datasets and provides a better user experience for infinite scrolling.
+
+#### Pagination Parameters
+
+- **`first`** - Number of items to retrieve from the start (positive integer)
+- **`after`** - Cursor to start retrieving items after (used for forward pagination)
+- **`last`** - Number of items to retrieve from the end (positive integer)
+- **`before`** - Cursor to start retrieving items before (used for backward pagination)
+- **`totalItems`** - Total count of items in the collection (returned in response)
+
+#### Example: Get First 10 Products
+
+```graphql
+query {
+  products(first: 10) {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalItems
+  }
+}
+```
+
+#### Example: Get Next Page
+
+```graphql
+query {
+  products(first: 10, after: "cursor_from_previous_response") {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalItems
+  }
+}
+```
+
+#### Example: Get Last 10 Products
+
+```graphql
+query {
+  products(last: 10) {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+      cursor
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
+    }
+    totalItems
+  }
+}
+```
+
+#### Example: Get Previous Page
+
+```graphql
+query {
+  products(last: 10, before: "cursor_from_response") {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+      cursor
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
+    }
+    totalItems
+  }
+}
+```
+
+[Learn more about Pagination →](/api/graphql/pagination)
+
+### 3. Exploring the API
 
 Use the interactive GraphQL Playground to test queries and mutations:
 
@@ -58,7 +162,7 @@ Use the interactive GraphQL Playground to test queries and mutations:
 
 [Start with Playground Guide →](/api/graphql/playground)
 
-### 3. Integration
+### 4. Integration
 
 Integrate Bagisto with your applications using one of these languages:
 
@@ -77,6 +181,7 @@ Integrate Bagisto with your applications using one of these languages:
 |----------|-------------|-----------------|
 | [Products](/api/graphql/shop/products) | Browse and search products | Get products, Search, Filter, Sort |
 | [Categories](/api/graphql/shop/categories) | Navigate category tree | Get categories, Get products by category |
+| [Attribute Options](/api/graphql/shop/attribute-options) | Product attribute values | Get options, Translations, Swatches |
 | [Cart](/api/graphql/shop/cart) | Manage shopping cart | Create, Add items, Update, Apply coupons |
 | [Customers](/api/graphql/shop/customers) | Customer authentication | Register, Login, Profile, Addresses |
 | [Orders](/api/graphql/shop/orders) | View and track orders | Get orders, Track shipments |
@@ -96,66 +201,6 @@ Integrate Bagisto with your applications using one of these languages:
 | [Attributes](/api/graphql/admin/attributes) | Product attributes | Create attributes, Options, Sets |
 | [Reports](/api/graphql/admin/reports) | Business analytics | Sales, Products, Customers, Inventory |
 
-## Common Tasks
-
-### Create a New Product (Admin)
-```graphql
-mutation CreateProduct($input: AdminCreateProductInput!) {
-  adminCreateProduct(input: $input) {
-    product {
-      id
-      name
-      sku
-      price
-      status
-    }
-  }
-}
-```
-
-### Get All Products (Shop)
-```graphql
-query GetProducts($first: Int!, $channel: String!) {
-  products(first: $first, channel: $channel) {
-    edges {
-      node {
-        id
-        name
-        price
-      }
-    }
-  }
-}
-```
-
-### Customer Registration (Shop)
-```graphql
-mutation Register($input: CustomerRegisterInput!) {
-  registerCustomer(input: $input) {
-    customer {
-      id
-      email
-      firstName
-      lastName
-    }
-    accessToken
-  }
-}
-```
-
-### Create Order (Admin)
-```graphql
-mutation CreateOrder($input: AdminCreateOrderInput!) {
-  adminCreateOrder(input: $input) {
-    order {
-      id
-      incrementId
-      status
-    }
-  }
-}
-```
-
 ## Best Practices
 
 Follow these recommendations for production deployments:
@@ -167,35 +212,6 @@ Follow these recommendations for production deployments:
 - **Monitoring** - Track API usage and performance
 
 [Read Full Best Practices Guide →](/api/graphql/best-practices)
-
-## API Response Format
-
-All GraphQL responses follow a consistent format:
-
-### Success Response
-```json
-{
-  "data": {
-    "queryName": {
-      "field": "value"
-    }
-  }
-}
-```
-
-### Error Response
-```json
-{
-  "errors": [
-    {
-      "message": "Error description",
-      "extensions": {
-        "code": "ERROR_CODE"
-      }
-    }
-  ]
-}
-```
 
 ## Rate Limiting
 
@@ -221,7 +237,7 @@ Response headers indicate current rate limit status:
 
 - **API Version** - 1.0
 - **GraphQL Spec** - June 2018
-- **Last Updated** - 2024
+- **Last Updated** - Dec 2025
 
 ---
 

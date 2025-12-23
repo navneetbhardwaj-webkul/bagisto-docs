@@ -404,12 +404,22 @@ export default defineConfig({
                     text: 'Queries',
                     collapsed: true,
                     items: [
-                      { text: 'Get Products', link: '/api/graphql/shop/queries/get-products' },
-                      { text: 'Get Product', link: '/api/graphql/shop/queries/get-product' },
-                      { text: 'Search Products', link: '/api/graphql/shop/queries/search-products' },
+                      { text: 'Single Attribute', link: '/api/graphql/shop/queries/get-attribute' },
+                      { text: 'Attributes', link: '/api/graphql/shop/queries/get-attributes' },
+                      { text: 'Attribute Options', link: '/api/graphql/shop/queries/get-attribute-options' },
+                      { text: 'Single Category', link: '/api/graphql/shop/queries/get-category' },
                       { text: 'Categories', link: '/api/graphql/shop/queries/categories' },
-                      { text: 'Product Details', link: '/api/graphql/shop/queries/product-details' },
-                      { text: 'Get Cart', link: '/api/graphql/shop/queries/get-cart' }
+                      { text: 'Tree Categories', link: '/api/graphql/shop/queries/tree-categories' },
+                      { text: 'Single Product', link: '/api/graphql/shop/queries/get-product' },
+                      { text: 'Products', link: '/api/graphql/shop/queries/get-products' },
+                      { text: 'Search Products', link: '/api/graphql/shop/queries/search-products' },
+                      { text: 'Get Cart', link: '/api/graphql/shop/queries/get-cart' },
+                      { text: 'Single Channel', link: '/api/graphql/shop/queries/get-channel' },
+                      { text: 'Channels', link: '/api/graphql/shop/queries/get-channels' },
+                      { text: 'Single Country', link: '/api/graphql/shop/queries/get-country' },
+                      { text: 'Countries', link: '/api/graphql/shop/queries/get-countries' },
+                      { text: 'Country States', link: '/api/graphql/shop/queries/get-country-states' },
+                      { text: 'Country State', link: '/api/graphql/shop/queries/get-country-state' }
                     ]
                   },
                   {
@@ -433,23 +443,7 @@ export default defineConfig({
                 text: 'Admin API',
                 collapsed: false,
                 items: [
-                  { text: 'Products', link: '/api/graphql/admin/products' },
-                  { text: 'Categories', link: '/api/graphql/admin/categories' },
-                  { text: 'Customers', link: '/api/graphql/admin/customers' },
-                  { text: 'Orders', link: '/api/graphql/admin/orders' },
-                  { text: 'Attributes', link: '/api/graphql/admin/attributes' },
-                  { text: 'Inventory', link: '/api/graphql/admin/inventory' },
-                  { text: 'Promotions', link: '/api/graphql/admin/promotions' },
-                  { text: 'Reports', link: '/api/graphql/admin/reports' },
-                  {
-                    text: 'Mutations',
-                    collapsed: true,
-                    items: [
-                      { text: 'Create Product', link: '/api/graphql/admin/mutations/create-product' },
-                      { text: 'Update Product', link: '/api/graphql/admin/mutations/update-product' },
-                      { text: 'Delete Product', link: '/api/graphql/admin/mutations/delete-product' }
-                    ]
-                  }
+                  { text: 'Coming Soon', link: '/api/graphql/admin-coming-soon' }
                 ]
               },
               { text: 'Playground Guide', link: '/api/graphql/playground' },
