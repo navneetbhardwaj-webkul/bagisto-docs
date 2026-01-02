@@ -3,43 +3,43 @@
 layout: home
 
 hero:
-  name: "Bagisto Developer Portal"
-  text: "Find detailed documentation and code examples."
-  tagline: "Build amazing e-commerce experiences with Bagisto"
+  name: "Bagisto API Documentation"
+  text: "REST & GraphQL API."
+  tagline: "Explore Bagisto’s API reference"
   actions:
     - theme: brand
       text: Get Started →
-      link: /getting-started/why-choose-bagisto
+      link: /api/introduction
     - theme: alt
       text: View on GitHub
-      link: https://github.com/bagisto/bagisto
+      link: https://github.com/bagisto/bagisto-api
   image:
     src: /logo-large.png
     alt: Bagisto
 
 features:
-  - title: Package Development
-    details: Learn how to create a new package for Bagisto and extend its functionality with custom modules, repositories, and service providers.
-    icon: 📦
-    link: /package-development/getting-started
-  - title: Shipping Method Development
-    details: Create custom shipping methods with rate calculation, admin configuration, and integration with checkout process.
-    icon: 🚚
-    link: /shipping-method-development/getting-started
-  - title: Payment Method Development
-    details: Build secure payment gateways and integrate with third-party payment processors for seamless transactions.
-    icon: 💳
-    link: /payment-method-development/getting-started
-  - title: Product Type Development
-    details: Develop custom product types with specialized pricing, inventory management, and cart integration features.
-    icon: 🛍️
-    link: /product-type-development/getting-started
-  - title: Theme Development
-    details: Create beautiful, responsive themes for Bagisto with custom layouts, components, and styling frameworks.
-    icon: 🎨
-    link: /theme-development/getting-started
-  - title: Performance
-    details: Implement caching, indexing, and optimization techniques for high-performance e-commerce sites.
-    icon: ⚡
-    link: /performance/introduction
+  - title: REST API
+    details: Explore powerful REST endpoints for managing products, orders, customers, and more. Easy to integrate with any application.
+    icon: 🔗
+    link: /api/rest-api
+  - title: GraphQL API
+    details: Query exactly the data you need with our flexible GraphQL API. Perfect for modern frontend applications and mobile apps.
+    icon: ⚙️
+    link: /api/graphql/introduction
+  - title: Authentication
+    details: Secure your API requests with token-based authentication and understand OAuth 2.0 integration methods.
+    icon: 🔐
+    link: /api/graphql/authentication
+  - title: Shop API
+    details: Access product catalogs, manage shopping carts, process checkouts, and handle customer accounts through powerful shop endpoints.
+    icon: 🛒
+    link: /api/graphql/introduction
+  - title: Admin API
+    details: Manage products, orders, customers, and business operations with comprehensive admin API endpoints.
+    icon: 📊
+    link: /api/graphql/admin-coming-soon
+  - title: Integration Guides
+    details: Best practices and examples for integrating Bagisto APIs with your application architecture.
+    icon: 📚
+    link: /api/graphql/integrations
 ---

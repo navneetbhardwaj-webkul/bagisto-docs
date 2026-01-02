@@ -3,7 +3,7 @@ outline: false
 examples:
   - id: get-categories-basic
     title: Get Categories - Basic
-    description: Retrieve all categories with basic information and pagination.
+    description: Retrieve categories with pagination using first and after arguments.
     query: |
       query getCategories($first: Int, $after: String) {
         categories(first: $first, after: $after) {
@@ -11,9 +11,13 @@ examples:
             node {
               id
               _id
-              name
-              slug
-              description
+              position
+              status
+              translation {
+                name
+                slug
+                urlPath
+              }
             }
           }
           pageInfo {
@@ -35,39 +39,47 @@ examples:
                 "node": {
                   "id": "/api/shop/categories/1",
                   "_id": 1,
-                  "name": "Electronics",
-                  "slug": "electronics",
-                  "description": "Electronic products and gadgets"
+                  "position": 1,
+                  "status": "1",
+                  "translation": {
+                    "name": "Men",
+                    "slug": "men",
+                    "urlPath": "men"
+                  }
                 }
               },
               {
                 "node": {
                   "id": "/api/shop/categories/2",
                   "_id": 2,
-                  "name": "Fashion",
-                  "slug": "fashion",
-                  "description": "Clothing and fashion items"
+                  "position": 2,
+                  "status": "1",
+                  "translation": {
+                    "name": "Woman",
+                    "slug": "woman",
+                    "urlPath": "woman"
+                  }
                 }
               }
             ],
             "pageInfo": {
               "hasNextPage": true,
-              "endCursor": "MQ=="
+              "endCursor": "Mg=="
             }
           }
         }
       }
     commonErrors:
-      - error: INVALID_PAGINATION
-        cause: Invalid first or after parameter
-        solution: Use valid pagination values
-      - error: UNAUTHORIZED
-        cause: Invalid or missing authentication token
-        solution: Provide valid authentication credentials
+      - error: INVALID_FIRST_VALUE
+        cause: First argument exceeds maximum allowed value or is negative
+        solution: Use first value between 1 and 100
+      - error: INVALID_CURSOR
+        cause: Pagination cursor is invalid
+        solution: Use cursor values from previous response
 
   - id: get-categories-complete
     title: Get Categories - Complete Details
-    description: Retrieve all categories with complete details including logos, banners, translations, and children.
+    description: Retrieve categories with all fields including logos, banners, translations, and children.
     query: |
       query getCategories($first: Int, $after: String) {
         categories(first: $first, after: $after) {
@@ -76,30 +88,39 @@ examples:
               id
               _id
               position
-              logoPath
-              logoUrl
               status
+              logoPath
               displayMode
               _lft
               _rgt
               additional
               bannerPath
+              createdAt
+              updatedAt
+              url
+              logoUrl
               bannerUrl
               translation {
-                id
-                _id
-                categoryId
                 name
                 slug
                 urlPath
-                description
-                metaTitle
-                metaDescription
-                metaKeywords
-                localeId
-                locale
               }
-              translations {
+              children(first: 100) {
+                edges {
+                  node {
+                    id
+                    _id
+                    position
+                    status
+                    translation {
+                      name
+                      slug
+                      urlPath
+                    }
+                  }
+                }
+              }
+              translations(first: 1) {
                 edges {
                   node {
                     id
@@ -125,30 +146,7 @@ examples:
                 }
                 totalCount
               }
-              createdAt
-              updatedAt
-              url
-              children {
-                edges {
-                  node {
-                    id
-                    _id
-                    position
-                    logoUrl
-                    status
-                    translation {
-                      name
-                      slug
-                    }
-                  }
-                }
-                pageInfo {
-                  hasNextPage
-                }
-                totalCount
-              }
             }
-            cursor
           }
           pageInfo {
             endCursor
@@ -161,8 +159,7 @@ examples:
       }
     variables: |
       {
-        "first": 10,
-        "after": null
+        "first": 10
       }
     response: |
       {
@@ -171,135 +168,104 @@ examples:
             "edges": [
               {
                 "node": {
-                  "id": "/api/shop/categories/1",
-                  "_id": 1,
+                  "id": "/api/shop/categories/2",
+                  "_id": 2,
                   "position": 1,
-                  "logoPath": "/categories/electronics-logo.png",
-                  "logoUrl": "https://example.com/categories/electronics-logo.png",
-                  "status": 1,
+                  "status": "1",
+                  "logoPath": "category/2/OYsuHioryn5KrOE7p8wQ2hQ3BReXY5CSbDzhvEk8.webp",
                   "displayMode": "products_and_description",
-                  "_lft": 1,
-                  "_rgt": 10,
-                  "additional": "{}",
-                  "bannerPath": "/categories/electronics-banner.jpg",
-                  "bannerUrl": "https://example.com/categories/electronics-banner.jpg",
+                  "_lft": "14",
+                  "_rgt": "23",
+                  "additional": null,
+                  "bannerPath": null,
+                  "createdAt": "2023-11-02T16:41:54+05:30",
+                  "updatedAt": "2023-11-29T10:56:40+05:30",
+                  "url": "http://127.0.0.1:8000/men",
+                  "logoUrl": "http://127.0.0.1:8000/storage/category/2/OYsuHioryn5KrOE7p8wQ2hQ3BReXY5CSbDzhvEk8.webp",
+                  "bannerUrl": null,
                   "translation": {
-                    "id": "/api/shop/category-translations/1",
-                    "_id": 1,
-                    "categoryId": 1,
-                    "name": "Electronics",
-                    "slug": "electronics",
-                    "urlPath": "electronics",
-                    "description": "All electronic devices and gadgets",
-                    "metaTitle": "Electronics - Best Deals Online",
-                    "metaDescription": "Shop the latest electronics and gadgets",
-                    "metaKeywords": "electronics, gadgets, devices",
-                    "localeId": 1,
-                    "locale": "en"
+                    "name": "Men",
+                    "slug": "men",
+                    "urlPath": "men"
+                  },
+                  "children": {
+                    "edges": [
+                      {
+                        "node": {
+                          "id": "/api/shop/categories/6",
+                          "_id": 6,
+                          "position": 1,
+                          "status": "1",
+                          "translation": {
+                            "name": "Formal wear",
+                            "slug": "formal-wear-men",
+                            "urlPath": "men/formal-wear-men"
+                          }
+                        }
+                      },
+                      {
+                        "node": {
+                          "id": "/api/shop/categories/7",
+                          "_id": 7,
+                          "position": 2,
+                          "status": "1",
+                          "translation": {
+                            "name": "Casual wear",
+                            "slug": "casual-wear-men",
+                            "urlPath": "men/casual-wear-men"
+                          }
+                        }
+                      }
+                    ]
                   },
                   "translations": {
                     "edges": [
                       {
                         "node": {
-                          "id": "/api/shop/category-translations/1",
-                          "_id": 1,
-                          "categoryId": 1,
-                          "name": "Electronics",
-                          "slug": "electronics",
-                          "urlPath": "electronics",
-                          "description": "All electronic devices and gadgets",
-                          "metaTitle": "Electronics - Best Deals Online",
-                          "metaDescription": "Shop the latest electronics and gadgets",
-                          "metaKeywords": "electronics, gadgets, devices",
-                          "localeId": 1,
+                          "id": "/api/shop/category_translations/2",
+                          "_id": 2,
+                          "categoryId": "2",
+                          "name": "Men",
+                          "slug": "men",
+                          "urlPath": "men",
+                          "description": "<p>Men</p>",
+                          "metaTitle": "",
+                          "metaDescription": "",
+                          "metaKeywords": "",
+                          "localeId": "1",
                           "locale": "en"
                         },
                         "cursor": "MA=="
-                      },
-                      {
-                        "node": {
-                          "id": "/api/shop/category-translations/2",
-                          "_id": 2,
-                          "categoryId": 1,
-                          "name": "الإلكترونيات",
-                          "slug": "electronics-ar",
-                          "urlPath": "electronics-ar",
-                          "description": "جميع الأجهزة الإلكترونية والغجزم",
-                          "metaTitle": "الإلكترونيات - أفضل العروض",
-                          "metaDescription": "تسوق أحدث الأجهزة الإلكترونية",
-                          "metaKeywords": "إلكترونيات, أجهزة",
-                          "localeId": 2,
-                          "locale": "ar"
-                        },
-                        "cursor": "MQ=="
                       }
                     ],
                     "pageInfo": {
-                      "endCursor": "MQ==",
+                      "endCursor": "MA==",
                       "startCursor": "MA==",
-                      "hasNextPage": false,
+                      "hasNextPage": true,
                       "hasPreviousPage": false
                     },
                     "totalCount": 2
-                  },
-                  "createdAt": "2024-01-15T10:30:00Z",
-                  "updatedAt": "2024-12-20T14:20:00Z",
-                  "url": "https://example.com/electronics",
-                  "children": {
-                    "edges": [
-                      {
-                        "node": {
-                          "id": "/api/shop/categories/5",
-                          "_id": 5,
-                          "position": 1,
-                          "logoUrl": "https://example.com/categories/mobiles-logo.png",
-                          "status": 1,
-                          "translation": {
-                            "name": "Mobile Phones",
-                            "slug": "mobile-phones"
-                          }
-                        }
-                      },
-                      {
-                        "node": {
-                          "id": "/api/shop/categories/6",
-                          "_id": 6,
-                          "position": 2,
-                          "logoUrl": "https://example.com/categories/laptops-logo.png",
-                          "status": 1,
-                          "translation": {
-                            "name": "Laptops",
-                            "slug": "laptops"
-                          }
-                        }
-                      }
-                    ],
-                    "pageInfo": {
-                      "hasNextPage": false
-                    },
-                    "totalCount": 2
                   }
-                },
-                "cursor": "MA=="
+                }
               }
             ],
             "pageInfo": {
-              "endCursor": "MA==",
-              "startCursor": "MA==",
-              "hasNextPage": false,
+              "endCursor": "Mg==",
+              "startCursor": "MQ==",
+              "hasNextPage": true,
               "hasPreviousPage": false
             },
-            "totalCount": 1
+            "totalCount": 8
           }
         }
       }
     commonErrors:
-      - error: INVALID_PAGINATION
-        cause: Invalid first or after parameter
-        solution: Use valid pagination values
-      - error: UNAUTHORIZED
-        cause: Invalid or missing authentication token
-        solution: Provide valid authentication credentials
+      - error: INVALID_FIRST_VALUE
+        cause: First argument value is out of bounds
+        solution: Use first value between 1 and 100
+      - error: INVALID_CURSOR
+        cause: Cursor format is invalid or expired
+        solution: Use cursor values from the previous response
 
   - id: get-categories-with-pagination
     title: Get Categories with Cursor Pagination
@@ -344,44 +310,44 @@ examples:
             "edges": [
               {
                 "node": {
-                  "id": "/api/shop/categories/1",
-                  "_id": 1,
-                  "position": 1,
-                  "translation": {
-                    "name": "Electronics",
-                    "slug": "electronics"
-                  },
-                  "status": 1,
-                  "children": {
-                    "totalCount": 5
-                  }
-                },
-                "cursor": "MA=="
-              },
-              {
-                "node": {
                   "id": "/api/shop/categories/2",
                   "_id": 2,
-                  "position": 2,
+                  "position": 1,
                   "translation": {
-                    "name": "Fashion",
-                    "slug": "fashion"
+                    "name": "Men",
+                    "slug": "men"
                   },
-                  "status": 1,
+                  "status": "1",
                   "children": {
-                    "totalCount": 3
+                    "totalCount": 4
                   }
                 },
                 "cursor": "MQ=="
+              },
+              {
+                "node": {
+                  "id": "/api/shop/categories/4",
+                  "_id": 4,
+                  "position": 2,
+                  "translation": {
+                    "name": "Woman",
+                    "slug": "woman"
+                  },
+                  "status": "1",
+                  "children": {
+                    "totalCount": 4
+                  }
+                },
+                "cursor": "Mg=="
               }
             ],
             "pageInfo": {
-              "endCursor": "MQ==",
-              "startCursor": "MA==",
+              "endCursor": "Mg==",
+              "startCursor": "MQ==",
               "hasNextPage": true,
               "hasPreviousPage": false
             },
-            "totalCount": 15
+            "totalCount": 8
           }
         }
       }
@@ -393,9 +359,9 @@ examples:
         cause: Using both forward and backward pagination
         solution: Use either (first, after) or (last, before), not both
 
-  - id: get-categories-with-translations
-    title: Get Categories with All Translations
-    description: Retrieve categories with complete translation information for multi-language support.
+  - id: get-categories-with-children
+    title: Get Categories with Child Categories
+    description: Retrieve categories along with their child categories for hierarchical display.
     query: |
       query getCategories($first: Int) {
         categories(first: $first) {
@@ -403,36 +369,31 @@ examples:
             node {
               id
               _id
+              position
               translation {
-                id
-                categoryId
                 name
                 slug
-                urlPath
-                description
-                metaTitle
-                metaDescription
-                metaKeywords
-                locale
               }
-              translations {
+              children(first: 50) {
                 edges {
                   node {
                     id
-                    categoryId
-                    name
-                    slug
-                    urlPath
-                    description
-                    metaTitle
-                    metaDescription
-                    metaKeywords
-                    locale
+                    _id
+                    position
+                    translation {
+                      name
+                      slug
+                    }
                   }
                 }
                 totalCount
               }
             }
+            cursor
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
           }
           totalCount
         }
@@ -448,143 +409,56 @@ examples:
             "edges": [
               {
                 "node": {
-                  "id": "/api/shop/categories/1",
-                  "_id": 1,
+                  "id": "/api/shop/categories/2",
+                  "_id": 2,
+                  "position": 1,
                   "translation": {
-                    "id": "/api/shop/category-translations/1",
-                    "categoryId": 1,
-                    "name": "Electronics",
-                    "slug": "electronics",
-                    "urlPath": "electronics",
-                    "description": "Electronic products",
-                    "metaTitle": "Electronics",
-                    "metaDescription": "Shop electronics",
-                    "metaKeywords": "electronics",
-                    "locale": "en"
+                    "name": "Men",
+                    "slug": "men"
                   },
-                  "translations": {
+                  "children": {
                     "edges": [
                       {
                         "node": {
-                          "id": "/api/shop/category-translations/1",
-                          "categoryId": 1,
-                          "name": "Electronics",
-                          "slug": "electronics",
-                          "urlPath": "electronics",
-                          "description": "Electronic products",
-                          "metaTitle": "Electronics",
-                          "metaDescription": "Shop electronics",
-                          "metaKeywords": "electronics",
-                          "locale": "en"
+                          "id": "/api/shop/categories/6",
+                          "_id": 6,
+                          "position": 1,
+                          "translation": {
+                            "name": "Formal wear",
+                            "slug": "formal-wear-men"
+                          }
                         }
                       },
                       {
                         "node": {
-                          "id": "/api/shop/category-translations/2",
-                          "categoryId": 1,
-                          "name": "Électronique",
-                          "slug": "electronique",
-                          "urlPath": "electronique",
-                          "description": "Produits électroniques",
-                          "metaTitle": "Électronique",
-                          "metaDescription": "Acheter des électroniques",
-                          "metaKeywords": "électronique",
-                          "locale": "fr"
+                          "id": "/api/shop/categories/7",
+                          "_id": 7,
+                          "position": 2,
+                          "translation": {
+                            "name": "Casual wear",
+                            "slug": "casual-wear-men"
+                          }
                         }
                       }
                     ],
-                    "totalCount": 2
+                    "totalCount": 4
                   }
-                }
-              }
-            ],
-            "totalCount": 1
-          }
-        }
-      }
-    commonErrors:
-      - error: NO_TRANSLATIONS
-        cause: Category has no translations
-        solution: Check if translations are configured
-
-  - id: get-categories-optimized
-    title: Get Categories - Optimized for Navigation
-    description: Query optimized for rendering category navigation with minimal data transfer.
-    query: |
-      query getCategories($first: Int) {
-        categories(first: $first) {
-          edges {
-            node {
-              id
-              _id
-              position
-              logoUrl
-              bannerUrl
-              status
-              displayMode
-              url
-              translation {
-                name
-                slug
-                metaTitle
-                metaDescription
-              }
-              children {
-                totalCount
-              }
-            }
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
-          totalCount
-        }
-      }
-    variables: |
-      {
-        "first": 20
-      }
-    response: |
-      {
-        "data": {
-          "categories": {
-            "edges": [
-              {
-                "node": {
-                  "id": "/api/shop/categories/1",
-                  "_id": 1,
-                  "position": 1,
-                  "logoUrl": "https://example.com/categories/electronics-logo.png",
-                  "bannerUrl": "https://example.com/categories/electronics-banner.jpg",
-                  "status": 1,
-                  "displayMode": "products_and_description",
-                  "url": "https://example.com/electronics",
-                  "translation": {
-                    "name": "Electronics",
-                    "slug": "electronics",
-                    "metaTitle": "Electronics - Best Deals",
-                    "metaDescription": "Shop the latest electronics"
-                  },
-                  "children": {
-                    "totalCount": 5
-                  }
-                }
+                },
+                "cursor": "MQ=="
               }
             ],
             "pageInfo": {
-              "hasNextPage": false,
-              "endCursor": "MA=="
+              "hasNextPage": true,
+              "endCursor": "MQ=="
             },
-            "totalCount": 1
+            "totalCount": 8
           }
         }
       }
     commonErrors:
-      - error: NO_CATEGORIES
-        cause: No categories available
-        solution: Create categories in admin panel
-
+      - error: INVALID_FIRST_VALUE
+        cause: First value exceeds maximum
+        solution: Use value between 1 and 100
 ---
 
 # Categories
@@ -606,15 +480,12 @@ This query supports full pagination with cursor-based navigation and includes co
 
 ## Arguments
 
-| Argument | Type | Description |
-|----------|------|-------------|
-| `first` | `Int` | Number of categories to return (forward pagination). Max: 100. |
-| `after` | `String` | Pagination cursor for forward navigation. |
-| `last` | `Int` | Number of categories for backward pagination. Max: 100. |
-| `before` | `String` | Pagination cursor for backward navigation. |
-| `parent_id` | `ID` | Filter by parent category ID. Returns only direct children. |
-| `status` | `Int` | Filter by status: `0` (inactive), `1` (active). Default: active only. |
-| `include_inactive` | `Boolean` | Include inactive categories. Default: `false` |
+| Argument | Type | Required | Description |
+|----------|------|----------|-------------|
+| `first` | `Int` | ❌ No | Number of categories to return (forward pagination). Max: 100. |
+| `after` | `String` | ❌ No | Pagination cursor for forward navigation. Use with `first`. |
+| `last` | `Int` | ❌ No | Number of categories for backward pagination. Max: 100. |
+| `before` | `String` | ❌ No | Pagination cursor for backward navigation. Use with `last`. |
 
 ## Possible Returns
 

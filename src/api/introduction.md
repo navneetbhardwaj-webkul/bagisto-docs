@@ -43,6 +43,13 @@ The Bagisto GraphQL API enables flexible, efficient data fetching with a single 
 GraphQL is perfect for modern frontend frameworks like React, Vue, and React Native. Check out our [GraphQL API Guide](./graphql-api) to get started.
 :::
 
+## Installation
+
+```bash
+# Install the Bagisto API package
+composer require bagisto/bagisto-api
+```
+
 ## Authentication
 
 Both APIs use secure authentication methods:

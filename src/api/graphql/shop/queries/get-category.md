@@ -41,12 +41,63 @@ examples:
         }
       }
     commonErrors:
-      - error: CATEGORY_NOT_FOUND
+      - error: id-required
+        cause: Category ID parameter is missing
+        solution: Provide the category ID as a required parameter
+      - error: invalid-id-format
+        cause: Invalid ID format. Expected IRI format like "/api/shop/categories/1" or numeric ID
+        solution: Use either numeric ID (1) or IRI format (/api/shop/categories/1)
+      - error: not-found
         cause: Category with given ID does not exist
-        solution: Verify the category ID is correct
-      - error: INVALID_ID_FORMAT
-        cause: Invalid category ID format
-        solution: Use a valid category ID like /api/shop/categories/1
+        solution: Verify the category ID is correct and the category is active
+
+  - id: get-category-by-numeric-id
+    title: Get Category by Numeric ID
+    description: Retrieve category using numeric ID format instead of IRI.
+    query: |
+      query getCategoryByID($id: ID!) {
+        category(id: $id) {
+          id
+          _id
+          position
+          status
+          translation {
+            name
+            slug
+            urlPath
+          }
+        }
+      }
+    variables: |
+      {
+        "id": "1"
+      }
+    response: |
+      {
+        "data": {
+          "category": {
+            "id": "/api/shop/categories/1",
+            "_id": 1,
+            "position": 1,
+            "status": 1,
+            "translation": {
+              "name": "Electronics",
+              "slug": "electronics",
+              "urlPath": "electronics"
+            }
+          }
+        }
+      }
+    commonErrors:
+      - error: id-required
+        cause: Category ID parameter is missing
+        solution: Provide the category ID as a required parameter
+      - error: invalid-id-format
+        cause: Invalid ID format. Expected IRI format like "/api/shop/categories/1" or numeric ID
+        solution: Use either numeric ID (1) or IRI format (/api/shop/categories/1)
+      - error: not-found
+        cause: Category with given ID does not exist
+        solution: Verify the category ID is correct and the category is active
 
   - id: get-category-complete
     title: Get Category - Complete Details
@@ -125,8 +176,11 @@ examples:
             }
             pageInfo {
               hasNextPage
-              totalCount
+              endCursor
+              startCursor
+              hasPreviousPage
             }
+            totalCount
           }
         }
       }
@@ -280,12 +334,15 @@ examples:
         }
       }
     commonErrors:
-      - error: CATEGORY_NOT_FOUND
+      - error: id-required
+        cause: Category ID parameter is missing
+        solution: Provide the category ID as a required parameter
+      - error: invalid-id-format
+        cause: Invalid ID format. Expected IRI format like "/api/shop/categories/1" or numeric ID
+        solution: Use either numeric ID (1) or IRI format (/api/shop/categories/1)
+      - error: not-found
         cause: Category with given ID does not exist
-        solution: Verify the category ID and check if it's active
-      - error: UNAUTHORIZED
-        cause: User is not authenticated
-        solution: Provide valid authentication credentials
+        solution: Verify the category ID is correct and the category is active
 
   - id: get-category-with-seo
     title: Get Category with SEO Data
@@ -560,7 +617,7 @@ This query returns comprehensive category data including logos, banners, all tra
 
 | Argument | Type | Description |
 |----------|------|-------------|
-| `id` | `ID!` | Category ID in format `/api/shop/categories/{id}` or numeric ID. |
+| `id` | `ID!` | Category ID. Supports two formats: numeric ID (e.g., `1`) or IRI format (e.g., `/api/shop/categories/1`). Required. |
 
 ## Possible Returns
 

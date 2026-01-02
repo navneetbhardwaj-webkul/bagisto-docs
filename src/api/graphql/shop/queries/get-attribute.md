@@ -5,12 +5,32 @@ examples:
     title: Get Attribute - Basic
     description: Retrieve basic attribute information by ID.
     query: |
-      query getAttribute($id: String!) {
+      query getAttributeByID($id: ID!){
         attribute(id: $id) {
           id
+          _id
           code
-          name
+          adminName
           type
+          swatchType
+          validation
+          regex
+          position
+          isRequired
+          isUnique
+          isFilterable
+          isComparable
+          isConfigurable
+          isUserDefined
+          isVisibleOnFront
+          valuePerLocale
+          valuePerChannel
+          defaultValue
+          enableWysiwyg
+          createdAt
+          updatedAt
+          columnName
+          validations
         }
       }
     variables: |
@@ -22,41 +42,139 @@ examples:
         "data": {
           "attribute": {
             "id": "/api/shop/attributes/23",
+            "_id": 23,
             "code": "color",
-            "name": "Color",
-            "type": "select"
+            "adminName": "Color",
+            "type": "select",
+            "swatchType": "color",
+            "validation": null,
+            "regex": null,
+            "position": 26,
+            "isRequired": "0",
+            "isUnique": "0",
+            "isFilterable": "1",
+            "isComparable": "0",
+            "isConfigurable": "1",
+            "isUserDefined": "1",
+            "isVisibleOnFront": "0",
+            "valuePerLocale": "0",
+            "valuePerChannel": "0",
+            "defaultValue": null,
+            "enableWysiwyg": "0",
+            "createdAt": "2023-11-02T16:40:10+05:30",
+            "updatedAt": "2023-12-06T12:52:51+05:30",
+            "columnName": "integer_value",
+            "validations": "{  }"
           }
         }
       }
     commonErrors:
-      - error: MISSING_ID
+      - error: Variable \"$id\" of required type \"ID!\" was not provided.
         cause: Attribute ID parameter is required
         solution: Provide a valid attribute ID in format /api/shop/attributes/{id}
-      - error: ATTRIBUTE_NOT_FOUND
+      - error: Invalid ID format. Expected IRI format like \"/api/shop/attributes/1\" or numeric ID
+        cause: Attribute ID is not valid
+        solution: Verify the attribute ID is correct format
+      - error: Attribute not found
         cause: Attribute ID does not exist
         solution: Verify the attribute ID is correct
-
+       
   - id: get-attribute-with-details
     title: Get Attribute with Full Details
     description: Retrieve attribute with all configuration flags and metadata.
     query: |
-      query getAttribute($id: String!) {
-        attribute(id: $id) {
-          id
-          code
-          name
-          type
-          sortOrder
-          isFilterable
-          isSearchable
-          isConfigurable
-          isVisibleOnFront
-          isRequired
-          defaultValue
-          createdAt
-          updatedAt
+      query getAttributeByID($id: ID!){
+          attribute(id: $id) {
+            id
+            _id
+            code
+            adminName
+            type
+            swatchType
+            validation
+            regex
+            position
+            isRequired
+            isUnique
+            isFilterable
+            isComparable
+            isConfigurable
+            isUserDefined
+            isVisibleOnFront
+            valuePerLocale
+            valuePerChannel
+            defaultValue
+            enableWysiwyg
+            createdAt
+            updatedAt
+            columnName
+            validations
+            options {
+              edges {
+                node {
+                  id
+                  _id
+                  adminName
+                  sortOrder
+                  swatchValue
+                  swatchValueUrl
+                  translation {
+                    id
+                    _id
+                    attributeOptionId
+                    locale
+                    label
+                  }
+                  translations {
+                    edges {
+                      node {
+                        id
+                        _id
+                        attributeOptionId
+                        locale
+                        label
+                      }
+                    }
+                    pageInfo {
+                      endCursor
+                      startCursor
+                    hasNextPage
+                    hasPreviousPage
+                    }
+                    totalCount
+                  }
+                }
+                cursor
+              }
+              pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
+                hasPreviousPage
+              }
+              totalCount
+            }
+            translations {
+              edges {
+                node {
+                  id
+                  _id
+                  attributeId
+                  locale
+                  name
+                }
+                cursor
+              }
+              pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
+                hasPreviousPage
+              }
+              totalCount
+            }
+          }
         }
-      }
     variables: |
       {
         "id": "/api/shop/attributes/23"
@@ -64,364 +182,549 @@ examples:
     response: |
       {
         "data": {
-          "attribute": {
-            "id": "/api/shop/attributes/23",
-            "code": "color",
-            "name": "Color",
-            "type": "select",
-            "sortOrder": 1,
-            "isFilterable": true,
-            "isSearchable": false,
-            "isConfigurable": true,
-            "isVisibleOnFront": true,
-            "isRequired": false,
-            "defaultValue": null,
-            "createdAt": "2024-01-15T10:30:00Z",
-            "updatedAt": "2024-01-20T14:22:00Z"
-          }
+            "attribute": {
+                "id": "/api/shop/attributes/23",
+                "_id": 23,
+                "code": "color",
+                "adminName": "Color",
+                "type": "select",
+                "swatchType": "color",
+                "validation": null,
+                "regex": null,
+                "position": 26,
+                "isRequired": "0",
+                "isUnique": "0",
+                "isFilterable": "1",
+                "isComparable": "0",
+                "isConfigurable": "1",
+                "isUserDefined": "1",
+                "isVisibleOnFront": "0",
+                "valuePerLocale": "0",
+                "valuePerChannel": "0",
+                "defaultValue": null,
+                "enableWysiwyg": "0",
+                "createdAt": "2023-11-02T16:40:10+05:30",
+                "updatedAt": "2023-12-06T12:52:51+05:30",
+                "columnName": "integer_value",
+                "validations": "{  }",
+                "options": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/1",
+                                "_id": 1,
+                                "adminName": "Red",
+                                "sortOrder": 0,
+                                "swatchValue": "#e10e0e",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/1",
+                                    "_id": 1,
+                                    "attributeOptionId": "1",
+                                    "locale": "en",
+                                    "label": "Red"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/84",
+                                                "_id": 84,
+                                                "attributeOptionId": "1",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/1",
+                                                "_id": 1,
+                                                "attributeOptionId": "1",
+                                                "locale": "en",
+                                                "label": "Red"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "MA=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/2",
+                                "_id": 2,
+                                "adminName": "Green",
+                                "sortOrder": 1,
+                                "swatchValue": "#155616",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/2",
+                                    "_id": 2,
+                                    "attributeOptionId": "2",
+                                    "locale": "en",
+                                    "label": "Green"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/85",
+                                                "_id": 85,
+                                                "attributeOptionId": "2",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/2",
+                                                "_id": 2,
+                                                "attributeOptionId": "2",
+                                                "locale": "en",
+                                                "label": "Green"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "MQ=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/3",
+                                "_id": 3,
+                                "adminName": "Yellow",
+                                "sortOrder": 2,
+                                "swatchValue": "#f6fa00",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/3",
+                                    "_id": 3,
+                                    "attributeOptionId": "3",
+                                    "locale": "en",
+                                    "label": "Yellow"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/86",
+                                                "_id": 86,
+                                                "attributeOptionId": "3",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/3",
+                                                "_id": 3,
+                                                "attributeOptionId": "3",
+                                                "locale": "en",
+                                                "label": "Yellow"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "Mg=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/4",
+                                "_id": 4,
+                                "adminName": "Black",
+                                "sortOrder": 3,
+                                "swatchValue": "#000000",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/4",
+                                    "_id": 4,
+                                    "attributeOptionId": "4",
+                                    "locale": "en",
+                                    "label": "Black"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/87",
+                                                "_id": 87,
+                                                "attributeOptionId": "4",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/4",
+                                                "_id": 4,
+                                                "attributeOptionId": "4",
+                                                "locale": "en",
+                                                "label": "Black"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "Mw=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/5",
+                                "_id": 5,
+                                "adminName": "White",
+                                "sortOrder": 4,
+                                "swatchValue": "#ffffff",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/5",
+                                    "_id": 5,
+                                    "attributeOptionId": "5",
+                                    "locale": "en",
+                                    "label": "White"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/88",
+                                                "_id": 88,
+                                                "attributeOptionId": "5",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/5",
+                                                "_id": 5,
+                                                "attributeOptionId": "5",
+                                                "locale": "en",
+                                                "label": "White"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "NA=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/39",
+                                "_id": 39,
+                                "adminName": "Orange",
+                                "sortOrder": 5,
+                                "swatchValue": "#ff6600",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/39",
+                                    "_id": 39,
+                                    "attributeOptionId": "39",
+                                    "locale": "en",
+                                    "label": "Orange"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/89",
+                                                "_id": 89,
+                                                "attributeOptionId": "39",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/39",
+                                                "_id": 39,
+                                                "attributeOptionId": "39",
+                                                "locale": "en",
+                                                "label": "Orange"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "NQ=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/41",
+                                "_id": 41,
+                                "adminName": "Blue",
+                                "sortOrder": 6,
+                                "swatchValue": "#0000ff",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/41",
+                                    "_id": 41,
+                                    "attributeOptionId": "41",
+                                    "locale": "en",
+                                    "label": "Blue"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/90",
+                                                "_id": 90,
+                                                "attributeOptionId": "41",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/41",
+                                                "_id": 41,
+                                                "attributeOptionId": "41",
+                                                "locale": "en",
+                                                "label": "Blue"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "Ng=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/42",
+                                "_id": 42,
+                                "adminName": "Pink",
+                                "sortOrder": 7,
+                                "swatchValue": "#e33d94",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/42",
+                                    "_id": 42,
+                                    "attributeOptionId": "42",
+                                    "locale": "en",
+                                    "label": "Pink"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/91",
+                                                "_id": 91,
+                                                "attributeOptionId": "42",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/42",
+                                                "_id": 42,
+                                                "attributeOptionId": "42",
+                                                "locale": "en",
+                                                "label": "Pink"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "Nw=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/43",
+                                "_id": 43,
+                                "adminName": "Purple",
+                                "sortOrder": 8,
+                                "swatchValue": "#6611bb",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/43",
+                                    "_id": 43,
+                                    "attributeOptionId": "43",
+                                    "locale": "en",
+                                    "label": "Purple"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/92",
+                                                "_id": 92,
+                                                "attributeOptionId": "43",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/43",
+                                                "_id": 43,
+                                                "attributeOptionId": "43",
+                                                "locale": "en",
+                                                "label": "Purple"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "OA=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/shop/attribute-options/46",
+                                "_id": 46,
+                                "adminName": "Grey",
+                                "sortOrder": 9,
+                                "swatchValue": "#949494",
+                                "swatchValueUrl": null,
+                                "translation": {
+                                    "id": "/api/attribute_option_translations/46",
+                                    "_id": 46,
+                                    "attributeOptionId": "46",
+                                    "locale": "en",
+                                    "label": "Grey"
+                                },
+                                "translations": {
+                                    "edges": [
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/93",
+                                                "_id": 93,
+                                                "attributeOptionId": "46",
+                                                "locale": "ar",
+                                                "label": ""
+                                            }
+                                        },
+                                        {
+                                            "node": {
+                                                "id": "/api/attribute_option_translations/46",
+                                                "_id": 46,
+                                                "attributeOptionId": "46",
+                                                "locale": "en",
+                                                "label": "Grey"
+                                            }
+                                        }
+                                    ],
+                                    "pageInfo": {
+                                        "endCursor": "MQ==",
+                                        "startCursor": "MA==",
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false
+                                    },
+                                    "totalCount": 2
+                                }
+                            },
+                            "cursor": "OQ=="
+                        }
+                    ],
+                    "pageInfo": {
+                        "endCursor": "OQ==",
+                        "startCursor": "MA==",
+                        "hasNextPage": true,
+                        "hasPreviousPage": false
+                    },
+                    "totalCount": 12
+                },
+                "translations": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "/api/attribute_translations/52",
+                                "_id": 52,
+                                "attributeId": "23",
+                                "locale": "ar",
+                                "name": ""
+                            },
+                            "cursor": "MA=="
+                        },
+                        {
+                            "node": {
+                                "id": "/api/attribute_translations/23",
+                                "_id": 23,
+                                "attributeId": "23",
+                                "locale": "en",
+                                "name": "Color"
+                            },
+                            "cursor": "MQ=="
+                        }
+                    ],
+                    "pageInfo": {
+                        "endCursor": "MQ==",
+                        "startCursor": "MA==",
+                        "hasNextPage": false,
+                        "hasPreviousPage": false
+                    },
+                    "totalCount": 2
+                }
+            }
         }
-      }
     commonErrors:
       - error: INVALID_FIELD
         cause: Requested field does not exist
         solution: Check available attribute fields in schema
-
-  - id: get-attribute-with-options
-    title: Get Attribute with Options
-    description: Retrieve attribute with all available options including translations.
-    query: |
-      query getAttribute($id: String!, $first: Int) {
-        attribute(id: $id) {
-          id
-          code
-          name
-          type
-          options(first: $first) {
-            edges {
-              node {
-                id
-                adminName
-                sortOrder
-                swatchValue
-                translation {
-                  locale
-                  label
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      }
-    variables: |
-      {
-        "id": "/api/shop/attributes/23",
-        "first": 20
-      }
-    response: |
-      {
-        "data": {
-          "attribute": {
-            "id": "/api/shop/attributes/23",
-            "code": "color",
-            "name": "Color",
-            "type": "select",
-            "options": {
-              "edges": [
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/1",
-                    "adminName": "Red",
-                    "sortOrder": 0,
-                    "swatchValue": "#e10e0e",
-                    "translation": {
-                      "locale": "en",
-                      "label": "Red"
-                    }
-                  }
-                },
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/2",
-                    "adminName": "Green",
-                    "sortOrder": 1,
-                    "swatchValue": "#155616",
-                    "translation": {
-                      "locale": "en",
-                      "label": "Green"
-                    }
-                  }
-                }
-              ],
-              "pageInfo": {
-                "hasNextPage": false,
-                "endCursor": "MQ=="
-              }
-            }
-          }
-        }
-      }
-    commonErrors:
-      - error: NO_OPTIONS
-        cause: Attribute has no options
-        solution: Check if options are configured for this attribute
-
-  - id: get-attribute-with-option-translations
-    title: Get Attribute with Multi-language Options
-    description: Retrieve attribute options with all available language translations.
-    query: |
-      query getAttribute($id: String!, $first: Int) {
-        attribute(id: $id) {
-          id
-          code
-          name
-          type
-          options(first: $first) {
-            edges {
-              node {
-                id
-                adminName
-                sortOrder
-                swatchValue
-                translations(first: 10) {
-                  edges {
-                    node {
-                      locale
-                      label
-                    }
-                  }
-                  pageInfo {
-                    hasNextPage
-                  }
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      }
-    variables: |
-      {
-        "id": "/api/shop/attributes/23",
-        "first": 10
-      }
-    response: |
-      {
-        "data": {
-          "attribute": {
-            "id": "/api/shop/attributes/23",
-            "code": "color",
-            "name": "Color",
-            "type": "select",
-            "options": {
-              "edges": [
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/1",
-                    "adminName": "Red",
-                    "sortOrder": 0,
-                    "swatchValue": "#e10e0e",
-                    "translations": {
-                      "edges": [
-                        {
-                          "node": {
-                            "locale": "en",
-                            "label": "Red"
-                          }
-                        },
-                        {
-                          "node": {
-                            "locale": "ar",
-                            "label": "أحمر"
-                          }
-                        },
-                        {
-                          "node": {
-                            "locale": "fr",
-                            "label": "Rouge"
-                          }
-                        }
-                      ],
-                      "pageInfo": {
-                        "hasNextPage": false
-                      }
-                    }
-                  }
-                }
-              ],
-              "pageInfo": {
-                "hasNextPage": false,
-                "endCursor": "MQ=="
-              }
-            }
-          }
-        }
-      }
-    commonErrors:
-      - error: NO_TRANSLATIONS
-        cause: No translations available for options
-        solution: Ensure translations are configured for this attribute's options
-
-  - id: get-attribute-pagination
-    title: Get Attribute with Options Pagination
-    description: Retrieve attribute and paginate through large option sets using cursors.
-    query: |
-      query getAttribute(
-        $id: String!
-        $first: Int
-        $after: String
-      ) {
-        attribute(id: $id) {
-          id
-          code
-          name
-          type
-          options(first: $first, after: $after) {
-            edges {
-              node {
-                id
-                adminName
-                sortOrder
-              }
-              cursor
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-              hasPreviousPage
-              startCursor
-            }
-          }
-        }
-      }
-    variables: |
-      {
-        "id": "/api/shop/attributes/23",
-        "first": 10,
-        "after": null
-      }
-    response: |
-      {
-        "data": {
-          "attribute": {
-            "id": "/api/shop/attributes/23",
-            "code": "color",
-            "name": "Color",
-            "type": "select",
-            "options": {
-              "edges": [
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/1",
-                    "adminName": "Red",
-                    "sortOrder": 0
-                  },
-                  "cursor": "MA=="
-                },
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/2",
-                    "adminName": "Green",
-                    "sortOrder": 1
-                  },
-                  "cursor": "MQ=="
-                }
-              ],
-              "pageInfo": {
-                "hasNextPage": true,
-                "endCursor": "MQ==",
-                "hasPreviousPage": false,
-                "startCursor": "MA=="
-              }
-            }
-          }
-        }
-      }
-    commonErrors:
-      - error: INVALID_CURSOR
-        cause: Pagination cursor is invalid
-        solution: Use cursor values from previous response pageInfo
-
-  - id: get-attribute-with-swatches
-    title: Get Attribute with Color/Image Swatches
-    description: Retrieve attribute with swatch values for color or image display.
-    query: |
-      query getAttribute($id: String!, $first: Int) {
-        attribute(id: $id) {
-          id
-          code
-          name
-          type
-          options(first: $first) {
-            edges {
-              node {
-                id
-                adminName
-                swatchValue
-                swatchValueUrl
-                translation {
-                  locale
-                  label
-                }
-              }
-            }
-          }
-        }
-      }
-    variables: |
-      {
-        "id": "/api/shop/attributes/24",
-        "first": 50
-      }
-    response: |
-      {
-        "data": {
-          "attribute": {
-            "id": "/api/shop/attributes/24",
-            "code": "pattern",
-            "name": "Pattern",
-            "type": "select",
-            "options": {
-              "edges": [
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/10",
-                    "adminName": "Pattern1",
-                    "swatchValue": null,
-                    "swatchValueUrl": "https://example.com/swatches/pattern1.png",
-                    "translation": {
-                      "locale": "en",
-                      "label": "Pattern 1"
-                    }
-                  }
-                },
-                {
-                  "node": {
-                    "id": "/api/shop/attribute-options/11",
-                    "adminName": "Pattern2",
-                    "swatchValue": null,
-                    "swatchValueUrl": "https://example.com/swatches/pattern2.png",
-                    "translation": {
-                      "locale": "en",
-                      "label": "Pattern 2"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
-    commonErrors:
-      - error: INVALID_SWATCH_URL
-        cause: Swatch image URL is invalid or inaccessible
-        solution: Verify swatch image exists at the specified URL
 ---
 
 # Get Attribute

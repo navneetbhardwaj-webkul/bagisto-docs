@@ -2,11 +2,11 @@
 outline: false
 examples:
   - id: tree-categories-basic
-    title: Get Tree Categories - Basic
-    description: Retrieve root categories with their hierarchical structure for navigation menus.
+    title: Tree Categories - Basic
+    description: Retrieve root and child categories with their basic hierarchical structure.
     query: |
       query treeCategories {
-        treeCategories {
+        treeCategories(parentId: 1) {
           id
           _id
           position
@@ -16,7 +16,7 @@ examples:
             slug
             urlPath
           }
-          children {
+          children(first: 100) {
             edges {
               node {
                 id
@@ -40,40 +40,40 @@ examples:
         "data": {
           "treeCategories": [
             {
-              "id": "/api/shop/categories/1",
-              "_id": 1,
+              "id": "/api/shop/categories/2",
+              "_id": 2,
               "position": 1,
-              "status": 1,
+              "status": "1",
               "translation": {
-                "name": "Electronics",
-                "slug": "electronics",
-                "urlPath": "electronics"
+                "name": "Men",
+                "slug": "men",
+                "urlPath": "men"
               },
               "children": {
                 "edges": [
                   {
                     "node": {
-                      "id": "/api/shop/categories/5",
-                      "_id": 5,
+                      "id": "/api/shop/categories/6",
+                      "_id": 6,
                       "position": 1,
-                      "status": 1,
+                      "status": "1",
                       "translation": {
-                        "name": "Mobile Phones",
-                        "slug": "mobile-phones",
-                        "urlPath": "electronics/mobile-phones"
+                        "name": "Formal wear",
+                        "slug": "formal-wear-men",
+                        "urlPath": "men/formal-wear-men"
                       }
                     }
                   },
                   {
                     "node": {
-                      "id": "/api/shop/categories/6",
-                      "_id": 6,
+                      "id": "/api/shop/categories/7",
+                      "_id": 7,
                       "position": 2,
-                      "status": 1,
+                      "status": "1",
                       "translation": {
-                        "name": "Laptops",
-                        "slug": "laptops",
-                        "urlPath": "electronics/laptops"
+                        "name": "Casual wear",
+                        "slug": "casual-wear-men",
+                        "urlPath": "men/casual-wear-men"
                       }
                     }
                   }
@@ -81,27 +81,27 @@ examples:
               }
             },
             {
-              "id": "/api/shop/categories/2",
-              "_id": 2,
+              "id": "/api/shop/categories/4",
+              "_id": 4,
               "position": 2,
-              "status": 1,
+              "status": "1",
               "translation": {
-                "name": "Fashion",
-                "slug": "fashion",
-                "urlPath": "fashion"
+                "name": "Woman",
+                "slug": "woman",
+                "urlPath": "woman"
               },
               "children": {
                 "edges": [
                   {
                     "node": {
-                      "id": "/api/shop/categories/7",
-                      "_id": 7,
-                      "position": 1,
-                      "status": 1,
+                      "id": "/api/shop/categories/15",
+                      "_id": 15,
+                      "position": 2,
+                      "status": "1",
                       "translation": {
-                        "name": "Men Clothing",
-                        "slug": "men-clothing",
-                        "urlPath": "fashion/men-clothing"
+                        "name": "Casual Wear",
+                        "slug": "casual-wear-female",
+                        "urlPath": "woman/casual-wear-female"
                       }
                     }
                   }
@@ -112,147 +112,52 @@ examples:
         }
       }
     commonErrors:
-      - error: UNAUTHORIZED
-        cause: Invalid or missing authentication token
-        solution: Provide valid authentication credentials
       - error: INVALID_PARENT_ID
-        cause: Parent category ID does not exist
-        solution: Verify the parent category ID is valid
+        cause: Parent category ID format is invalid or does not exist
+        solution: Provide a valid parent category ID
 
-  - id: tree-categories-with-parent
-    title: Get Tree Categories with Parent ID Filter
-    description: Retrieve categories filtered by parent ID to get specific subtrees for navigation.
+  - id: tree-categories-complete
+    title: Tree Categories - Complete Details
+    description: Retrieve categories with all fields including logos, banners, display mode, and translations.
     query: |
-      query treeCategories($parentId: Int!) {
-        treeCategories(parentId: $parentId) {
+      query treeCategories {
+        treeCategories(parentId: 1) {
           id
           _id
           position
           status
+          logoPath
+          displayMode
+          _lft
+          _rgt
+          additional
+          bannerPath
+          createdAt
+          updatedAt
+          url
+          logoUrl
+          bannerUrl
           translation {
             name
             slug
             urlPath
           }
-          children {
+          children(first: 100) {
             edges {
               node {
                 id
                 _id
                 position
+                status
                 translation {
                   name
                   slug
                   urlPath
                 }
-                children {
-                  edges {
-                    node {
-                      id
-                      _id
-                      translation {
-                        name
-                        slug
-                      }
-                    }
-                  }
-                }
               }
             }
           }
-        }
-      }
-    variables: |
-      {
-        "parentId": 1
-      }
-    response: |
-      {
-        "data": {
-          "treeCategories": [
-            {
-              "id": "/api/shop/categories/1",
-              "_id": 1,
-              "position": 1,
-              "status": 1,
-              "translation": {
-                "name": "Electronics",
-                "slug": "electronics",
-                "urlPath": "electronics"
-              },
-              "children": {
-                "edges": [
-                  {
-                    "node": {
-                      "id": "/api/shop/categories/5",
-                      "_id": 5,
-                      "position": 1,
-                      "translation": {
-                        "name": "Mobile Phones",
-                        "slug": "mobile-phones",
-                        "urlPath": "electronics/mobile-phones"
-                      },
-                      "children": {
-                        "edges": [
-                          {
-                            "node": {
-                              "id": "/api/shop/categories/8",
-                              "_id": 8,
-                              "translation": {
-                                "name": "Smartphones",
-                                "slug": "smartphones"
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    commonErrors:
-      - error: PARENT_NOT_FOUND
-        cause: Parent category with given ID does not exist
-        solution: Verify the parent ID exists in the system
-
-  - id: tree-categories-full-details
-    title: Get Tree Categories - Full Details with Translations
-    description: Retrieve complete category tree with all details, translations, banners, and logos for full-featured navigation.
-    query: |
-      query treeCategories {
-        treeCategories {
-          id
-          _id
-          position
-          logoPath
-          logoUrl
-          bannerPath
-          bannerUrl
-          displayMode
-          status
-          _lft
-          _rgt
-          createdAt
-          updatedAt
-          url
-          translation {
-            id
-            _id
-            categoryId
-            name
-            slug
-            urlPath
-            description
-            metaTitle
-            metaDescription
-            metaKeywords
-            locale
-          }
-          translations {
+          translations(first: 1) {
             edges {
               node {
                 id
@@ -265,227 +170,8 @@ examples:
                 metaTitle
                 metaDescription
                 metaKeywords
+                localeId
                 locale
-              }
-            }
-            totalCount
-          }
-          children {
-            edges {
-              node {
-                id
-                _id
-                position
-                logoUrl
-                bannerUrl
-                status
-                translation {
-                  name
-                  slug
-                  description
-                }
-                translations {
-                  totalCount
-                }
-                children {
-                  totalCount
-                }
-              }
-            }
-            totalCount
-          }
-        }
-      }
-    variables: |
-      {}
-    response: |
-      {
-        "data": {
-          "treeCategories": [
-            {
-              "id": "/api/shop/categories/1",
-              "_id": 1,
-              "position": 1,
-              "logoPath": "/categories/electronics-logo.png",
-              "logoUrl": "https://example.com/categories/electronics-logo.png",
-              "bannerPath": "/categories/electronics-banner.jpg",
-              "bannerUrl": "https://example.com/categories/electronics-banner.jpg",
-              "displayMode": "products_and_description",
-              "status": 1,
-              "_lft": 1,
-              "_rgt": 12,
-              "createdAt": "2024-01-15T10:30:00Z",
-              "updatedAt": "2024-12-20T14:20:00Z",
-              "url": "https://example.com/electronics",
-              "translation": {
-                "id": "/api/shop/category-translations/1",
-                "_id": 1,
-                "categoryId": 1,
-                "name": "Electronics",
-                "slug": "electronics",
-                "urlPath": "electronics",
-                "description": "All electronic devices and gadgets",
-                "metaTitle": "Electronics - Best Deals",
-                "metaDescription": "Shop the latest electronics",
-                "metaKeywords": "electronics, gadgets, devices",
-                "locale": "en"
-              },
-              "translations": {
-                "edges": [],
-                "totalCount": 3
-              },
-              "children": {
-                "edges": [
-                  {
-                    "node": {
-                      "id": "/api/shop/categories/5",
-                      "_id": 5,
-                      "position": 1,
-                      "logoUrl": "https://example.com/categories/mobiles-logo.png",
-                      "bannerUrl": "https://example.com/categories/mobiles-banner.jpg",
-                      "status": 1,
-                      "translation": {
-                        "name": "Mobile Phones",
-                        "slug": "mobile-phones",
-                        "description": "Smartphones and mobile devices"
-                      },
-                      "translations": {
-                        "totalCount": 2
-                      },
-                      "children": {
-                        "totalCount": 3
-                      }
-                    }
-                  }
-                ],
-                "totalCount": 4
-              }
-            }
-          ]
-        }
-      }
-    commonErrors:
-      - error: NO_CATEGORIES
-        cause: No categories available in the system
-        solution: Create categories in the admin panel
-
-  - id: tree-categories-navigation-menu
-    title: Get Tree Categories - Optimized for Navigation Menu
-    description: Query optimized for rendering a multi-level dropdown navigation menu with minimal data transfer.
-    query: |
-      query treeCategories {
-        treeCategories {
-          _id
-          position
-          translation {
-            name
-            slug
-          }
-          url
-          children {
-            edges {
-              node {
-                _id
-                position
-                translation {
-                  name
-                  slug
-                }
-                url
-                children {
-                  edges {
-                    node {
-                      _id
-                      translation {
-                        name
-                        slug
-                      }
-                      url
-                    }
-                  }
-                  totalCount
-                }
-              }
-            }
-            totalCount
-          }
-        }
-      }
-    variables: |
-      {}
-    response: |
-      {
-        "data": {
-          "treeCategories": [
-            {
-              "_id": 1,
-              "position": 1,
-              "translation": {
-                "name": "Electronics",
-                "slug": "electronics"
-              },
-              "url": "https://example.com/electronics",
-              "children": {
-                "edges": [
-                  {
-                    "node": {
-                      "_id": 5,
-                      "position": 1,
-                      "translation": {
-                        "name": "Mobile Phones",
-                        "slug": "mobile-phones"
-                      },
-                      "url": "https://example.com/electronics/mobile-phones",
-                      "children": {
-                        "edges": [
-                          {
-                            "node": {
-                              "_id": 8,
-                              "translation": {
-                                "name": "Smartphones",
-                                "slug": "smartphones"
-                              },
-                              "url": "https://example.com/electronics/mobile-phones/smartphones"
-                            }
-                          }
-                        ],
-                        "totalCount": 1
-                      }
-                    }
-                  }
-                ],
-                "totalCount": 2
-              }
-            }
-          ]
-        }
-      }
-    commonErrors:
-      - error: UNAUTHORIZED
-        cause: User is not authenticated
-        solution: Login with valid credentials
-
-  - id: tree-categories-with-pagination
-    title: Get Tree Categories with Paginated Children
-    description: Retrieve category tree with paginated children collections for handling large category structures.
-    query: |
-      query treeCategories($first: Int, $after: String) {
-        treeCategories {
-          id
-          _id
-          translation {
-            name
-            slug
-          }
-          children(first: $first, after: $after) {
-            edges {
-              node {
-                id
-                _id
-                translation {
-                  name
-                  slug
-                }
               }
               cursor
             }
@@ -500,165 +186,415 @@ examples:
         }
       }
     variables: |
-      {
-        "first": 5,
-        "after": null
-      }
+      {}
     response: |
       {
         "data": {
           "treeCategories": [
             {
-              "id": "/api/shop/categories/1",
-              "_id": 1,
+              "id": "/api/shop/categories/2",
+              "_id": 2,
+              "position": 1,
+              "status": "1",
+              "logoPath": "category/2/OYsuHioryn5KrOE7p8wQ2hQ3BReXY5CSbDzhvEk8.webp",
+              "displayMode": "products_and_description",
+              "_lft": "14",
+              "_rgt": "23",
+              "additional": null,
+              "bannerPath": null,
+              "createdAt": "2023-11-02T16:41:54+05:30",
+              "updatedAt": "2023-11-29T10:56:40+05:30",
+              "url": "http://127.0.0.1:8000/men",
+              "logoUrl": "http://127.0.0.1:8000/storage/category/2/OYsuHioryn5KrOE7p8wQ2hQ3BReXY5CSbDzhvEk8.webp",
+              "bannerUrl": null,
               "translation": {
-                "name": "Electronics",
-                "slug": "electronics"
+                "name": "Men",
+                "slug": "men",
+                "urlPath": "men"
               },
               "children": {
                 "edges": [
                   {
                     "node": {
-                      "id": "/api/shop/categories/5",
-                      "_id": 5,
+                      "id": "/api/shop/categories/6",
+                      "_id": 6,
+                      "position": 1,
+                      "status": "1",
                       "translation": {
-                        "name": "Mobile Phones",
-                        "slug": "mobile-phones"
+                        "name": "Formal wear",
+                        "slug": "formal-wear-men",
+                        "urlPath": "men/formal-wear-men"
                       }
-                    },
-                    "cursor": "MA=="
+                    }
                   },
                   {
                     "node": {
-                      "id": "/api/shop/categories/6",
-                      "_id": 6,
+                      "id": "/api/shop/categories/7",
+                      "_id": 7,
+                      "position": 2,
+                      "status": "1",
                       "translation": {
-                        "name": "Laptops",
-                        "slug": "laptops"
+                        "name": "Casual wear",
+                        "slug": "casual-wear-men",
+                        "urlPath": "men/casual-wear-men"
                       }
+                    }
+                  }
+                ]
+              },
+              "translations": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "/api/shop/category_translations/2",
+                      "_id": 2,
+                      "categoryId": "2",
+                      "name": "Men",
+                      "slug": "men",
+                      "urlPath": "men",
+                      "description": "<p>Men</p>",
+                      "metaTitle": "",
+                      "metaDescription": "",
+                      "metaKeywords": "",
+                      "localeId": "1",
+                      "locale": "en"
                     },
-                    "cursor": "MQ=="
+                    "cursor": "MA=="
                   }
                 ],
                 "pageInfo": {
-                  "endCursor": "MQ==",
+                  "endCursor": "MA==",
                   "startCursor": "MA==",
                   "hasNextPage": true,
                   "hasPreviousPage": false
                 },
-                "totalCount": 12
+                "totalCount": 2
               }
             }
           ]
         }
       }
     commonErrors:
-      - error: INVALID_PAGINATION_CURSOR
-        cause: Cursor format is invalid
-        solution: Use cursor values from previous response
+      - error: INVALID_PARENT_ID
+        cause: Parent category ID is invalid or does not exist
+        solution: Use a valid parent category ID
 
+  - id: tree-categories-with-parent-filter
+    title: Tree Categories - Filter by Parent ID
+    description: Retrieve categories filtered by a specific parent ID to get a subtree.
+    query: |
+      query treeCategories {
+        treeCategories(parentId: 2) {
+          id
+          _id
+          position
+          status
+          logoPath
+          displayMode
+          translation {
+            name
+            slug
+            urlPath
+          }
+          children(first: 50) {
+            edges {
+              node {
+                id
+                _id
+                position
+                status
+                translation {
+                  name
+                  slug
+                  urlPath
+                }
+              }
+            }
+          }
+        }
+      }
+    variables: |
+      {}
+    response: |
+      {
+        "data": {
+          "treeCategories": [
+            {
+              "id": "/api/shop/categories/6",
+              "_id": 6,
+              "position": 1,
+              "status": "1",
+              "logoPath": "category/6/logo.webp",
+              "displayMode": "products_and_description",
+              "translation": {
+                "name": "Formal wear",
+                "slug": "formal-wear-men",
+                "urlPath": "men/formal-wear-men"
+              },
+              "children": {
+                "edges": []
+              }
+            },
+            {
+              "id": "/api/shop/categories/7",
+              "_id": 7,
+              "position": 2,
+              "status": "1",
+              "logoPath": "category/7/logo.webp",
+              "displayMode": "products_and_description",
+              "translation": {
+                "name": "Casual wear",
+                "slug": "casual-wear-men",
+                "urlPath": "men/casual-wear-men"
+              },
+              "children": {
+                "edges": []
+              }
+            }
+          ]
+        }
+      }
+    commonErrors:
+      - error: INVALID_PARENT_ID
+        cause: Parent category ID is invalid
+        solution: Provide a valid parent category ID that exists in the system
 ---
 
 # Tree Categories
 
 ## About
 
-The `treeCategories` query retrieves categories in a hierarchical tree structure, perfect for rendering navigation menus, breadcrumbs, and category hierarchies in e-commerce websites. This query supports:
+The `treeCategories` query retrieves categories in a hierarchical tree structure, useful for navigation menus and category browsing. This query is essential for:
 
-- **Multi-level Category Hierarchies** - Display parent-child category relationships
-- **Navigation Menus** - Render dropdown menus with multiple levels
-- **Breadcrumb Navigation** - Build breadcrumb trails using the tree structure
-- **SEO Metadata** - Include meta tags, descriptions for each category
-- **Media Assets** - Fetch logos, banners, and display modes
-- **Multi-language Support** - Retrieve translations for all languages
-- **Pagination** - Handle large category structures with pagination
+- Building category navigation menus
+- Displaying category hierarchies for storefront
+- Managing nested category structures
+- Fetching categories with their parent-child relationships
+- Building breadcrumb navigation
+- Creating category tree widgets
 
-This query uses a tree structure with recursive `children` edges, making it ideal for iterating through categories at any depth level.
+The query returns an array of categories (not a paginated connection) with nested children and translations. Use the `parentId` argument to filter categories by their parent.
 
 ## Arguments
 
-| Argument | Type | Description |
-|----------|------|-------------|
-| `parentId` | `Int` | Filter categories by parent ID. Omit for root categories. |
-| `status` | `Int` | Filter by status: `0` (inactive), `1` (active). Default: active categories only. |
-| `first` | `Int` | Number of children per category node. Default: `20` |
-| `after` | `String` | Cursor for pagination of children. Use with `first` for pagination. |
+| Argument | Type | Required | Description |
+|----------|------|----------|-------------|
+| `parentId` | `Int` | ✅ Yes | The numeric ID of the parent category to filter by. Specifies which level of the tree to retrieve. |
 
 ## Possible Returns
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | `ID!` | Unique category identifier. |
-| `_id` | `Int!` | Numeric category ID. |
-| `position` | `Int` | Display position in parent category. |
-| `logoPath` | `String` | File path to category logo. |
-| `logoUrl` | `String` | Full URL to category logo image. |
-| `bannerPath` | `String` | File path to category banner. |
-| `bannerUrl` | `String` | Full URL to category banner image. |
-| `displayMode` | `String` | Display mode (products_only, category_and_products, products_and_description). |
-| `status` | `Int` | Category status (0 = inactive, 1 = active). |
-| `_lft` | `Int` | Nested set left value (internal tree structure). |
-| `_rgt` | `Int` | Nested set right value (internal tree structure). |
-| `additional` | `String` | Additional metadata and settings. |
-| `translation` | `CategoryTranslation!` | Default locale category translation. |
-| `translation.id` | `ID!` | Translation ID. |
-| `translation._id` | `Int!` | Numeric translation ID. |
-| `translation.categoryId` | `Int!` | Associated category ID. |
-| `translation.name` | `String!` | Category name in current language. |
-| `translation.slug` | `String!` | URL slug for the category. |
-| `translation.urlPath` | `String!` | Full URL path including parent categories. |
-| `translation.description` | `String` | Category description text. |
-| `translation.metaTitle` | `String` | SEO meta title tag. |
-| `translation.metaDescription` | `String` | SEO meta description. |
-| `translation.metaKeywords` | `String` | SEO keywords. |
-| `translation.locale` | `String!` | Language locale code. |
-| `translations` | `[CategoryTranslation!]!` | All available translations for the category. |
-| `children` | `[Category!]!` | Recursive children categories with same structure. |
-| `children.edges` | `[Edge!]!` | Category children edges with cursor pagination. |
-| `children.pageInfo` | `PageInfo!` | Pagination information for children. |
-| `children.totalCount` | `Int!` | Total number of child categories. |
-| `createdAt` | `DateTime!` | Category creation timestamp. |
-| `updatedAt` | `DateTime!` | Last update timestamp. |
-| `url` | `String` | Full category URL. |
+| `treeCategories` | `[Category!]!` | Array of category objects matching the parent ID filter. |
 
-## Use Cases
+## Category Fields
 
-### 1. Main Navigation Menu
-Use the "Navigation Menu Optimized" example to render a dropdown navigation menu with minimal data transfer.
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `String!` | Unique identifier in format `/api/shop/categories/{id}` |
+| `_id` | `Int!` | Numeric identifier for the category |
+| `position` | `Int!` | Display order position of the category |
+| `status` | `String!` | Status of the category ("1" for active, "0" for inactive) |
+| `logoPath` | `String` | File path to the category logo |
+| `displayMode` | `String` | Display mode (e.g., "products_and_description", "products_only") |
+| `_lft` | `String` | Left pointer for nested set tree structure |
+| `_rgt` | `String` | Right pointer for nested set tree structure |
+| `additional` | `Mixed` | Additional category attributes |
+| `bannerPath` | `String` | File path to the category banner |
+| `createdAt` | `String!` | Creation timestamp (ISO 8601 format) |
+| `updatedAt` | `String!` | Last update timestamp (ISO 8601 format) |
+| `url` | `String` | Full URL to the category page |
+| `logoUrl` | `String` | Full URL to the category logo image |
+| `bannerUrl` | `String` | Full URL to the category banner image |
+| `translation` | `CategoryTranslation` | Default translation object with name, slug, and urlPath |
+| `translations` | `Connection` | Paginated translations for all locales |
+| `children` | `Connection` | Paginated child categories with their details |
 
-### 2. Category Filter/Browse
-Use the "Full Details with Translations" example to display category filters with images and descriptions.
+## Common Use Cases
 
-### 3. Breadcrumb Navigation
-Use the tree structure to build breadcrumb paths showing the hierarchy from parent to current category.
+### Get Root Categories for Main Menu
 
-### 4. Sitemap Generation
-Use the complete tree to generate XML sitemaps with all category URLs.
+```graphql
+query GetRootCategories {
+  treeCategories(parentId: 1) {
+    id
+    _id
+    position
+    status
+    translation {
+      name
+      slug
+      urlPath
+    }
+    logoUrl
+    children(first: 50) {
+      edges {
+        node {
+          id
+          position
+          translation {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+}
+```
 
-### 5. Mobile Navigation
-Use the "Pagination" example to handle large category lists on mobile devices.
+### Get Category Tree with Full Details
+
+```graphql
+query GetCategoryTree {
+  treeCategories(parentId: 1) {
+    id
+    _id
+    position
+    status
+    logoPath
+    logoUrl
+    bannerUrl
+    displayMode
+    url
+    translation {
+      name
+      slug
+      description
+    }
+    children(first: 100) {
+      edges {
+        node {
+          id
+          position
+          translation {
+            name
+            slug
+            urlPath
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Get Specific Subtree by Parent
+
+```graphql
+query GetCategorySubtree {
+  treeCategories(parentId: 2) {
+    id
+    position
+    translation {
+      name
+      slug
+    }
+    children(first: 50) {
+      edges {
+        node {
+          id
+          position
+          translation {
+            name
+            slug
+            urlPath
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Get Categories with Translations
+
+```graphql
+query GetCategoriesWithTranslations {
+  treeCategories(parentId: 1) {
+    id
+    position
+    translation {
+      name
+      slug
+      description
+    }
+    translations(first: 10) {
+      edges {
+        node {
+          locale
+          name
+          slug
+          description
+        }
+      }
+      totalCount
+    }
+    children(first: 100) {
+      edges {
+        node {
+          id
+          position
+          translation {
+            name
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Error Handling
+
+### Invalid Parent ID - Non-integer Value
+
+```json
+{
+  "errors": [
+    {
+      "message": "Int cannot represent non-integer value: dffddf"
+    }
+  ]
+}
+```
+
+### Invalid Parent ID - String Instead of Integer
+
+```json
+{
+  "errors": [
+    {
+      "message": "Int cannot represent non-integer value: \"1111\""
+    }
+  ]
+}
+```
+
+### Parent ID Not Found
+
+```json
+{
+  "data": {
+    "treeCategories": []
+  }
+}
+```
 
 ## Best Practices
 
-1. **Request Only Needed Fields** - Minimize data transfer by requesting only required fields
-2. **Use Pagination for Large Trees** - When categories have many children, use pagination
-3. **Cache Category Tree** - Categories rarely change, cache the entire tree structure
-4. **Optimize for Frontend Framework** - Use pagination and field selection based on your framework
-5. **Handle Deep Nesting** - Use recursive queries carefully to avoid performance issues
-6. **Include SEO Metadata** - Always fetch meta tags for SEO optimization
-7. **Filter Inactive Categories** - Only show active categories in production
-
-## Performance Tips
-
-- **Limit Recursion Depth** - Avoid fetching too many levels of children at once
-- **Use Pagination** - Paginate children for categories with many sub-categories
-- **Cache Results** - Store category tree in frontend cache/state management
-- **Lazy Load Children** - Load deeper levels only when user interacts with menu
-- **Combine with Other Queries** - Fetch category and products in separate requests
+1. **Always Provide parentId** - The parentId parameter is required
+2. **Use First for Children Pagination** - Limit child categories with the `first` argument (e.g., `first: 100`)
+3. **Request Only Needed Fields** - Reduce payload by selecting specific fields
+4. **Cache Navigation Data** - Categories change infrequently; implement caching
+5. **Handle Status Filtering** - Filter by status="1" on client side if needed
+6. **Use Translation Fields** - Include translation data for multi-language support
+7. **Paginate Nested Collections** - Use `first` argument for children and translations
+8. **Use Position Field** - Order results by position field for proper display
 
 ## Related Resources
 
-- [Categories Query](/api/graphql/shop/queries/categories) - Get flat category list
-- [Get Products](/api/graphql/shop/queries/get-products) - Query products within a category
+- [Get Single Category](/api/graphql/shop/queries/get-category) - Retrieve a single category by ID
+- [Get Categories](/api/graphql/shop/queries/categories) - List all categories with pagination
 - [Pagination Guide](/api/graphql/pagination) - Cursor pagination documentation
 - [Shop API Overview](/api/graphql/shop-api) - Overview of Shop API resources

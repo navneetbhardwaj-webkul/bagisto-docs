@@ -60,10 +60,12 @@ function parseTabsContent(content: string): Array<{ label: string; code: string 
 }
 
 export default defineConfig({
+  ignoreDeadLinks: true,
   lang: 'en-US',
   title: "Bagisto",
   description: "Bagisto Developer Documentation",
   cleanUrls: true,
+  ssr: false,
 
   markdown: {
     config: (md: any) => {
@@ -261,7 +263,7 @@ export default defineConfig({
     ],
 
     editLink: {
-      pattern: 'https://github.com/bagisto/bagisto-docs/edit/master/src/:path',
+      pattern: 'https://github.com/bagisto/bagisto-api-docs/edit/master/src/:path',
       text: 'Help us improve this page on Github.'
     },
 
@@ -274,125 +276,46 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Getting Started with Bagisto',
-        collapsed: false,
-        items: [
-          { text: 'Why Choose Bagisto?', link: '/getting-started/why-choose-bagisto' },
-          { text: 'Before You Start', link: '/getting-started/before-you-start' },
-          { text: 'Installation', link: '/getting-started/installation' },
-          { text: 'Upgrade Guide', link: '/getting-started/upgrade-guide' },
-          { text: 'Contribution Guide', link: '/getting-started/contribution-guide' },
-          { text: 'Best Security Practices', link: '/getting-started/best-security-practice' },
-          { text: 'Deployment', link: '/getting-started/deployment' },
-          { text: 'LLMs.txt', link: '/getting-started/llms' }
-        ]
-      },
-      {
-        text: 'Architecture Concepts',
-        collapsed: false,
-        items: [
-          { text: 'Overview', link: '/architecture/overview' },
-          { text: 'Backend', link: '/architecture/backend' },
-          { text: 'Frontend', link: '/architecture/frontend' },
-        ]
-      },
-      {
-        text: 'Package Development',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/package-development/getting-started' },
-          { text: 'Migrations', link: '/package-development/migrations' },
-          { text: 'Models', link: '/package-development/models' },
-          { text: 'Repositories', link: '/package-development/repositories' },
-          { text: 'Routes', link: '/package-development/routes' },
-          { text: 'Controllers', link: '/package-development/controllers' },
-          { text: 'Views', link: '/package-development/views' },
-          { text: 'Localization', link: '/package-development/localization' },
-          { text: 'DataGrid', link: '/package-development/datagrid' },
-          { text: 'Menu', link: '/package-development/menu' },
-          { text: 'Access Control List', link: '/package-development/access-control-list' },
-          { text: 'System Configuration', link: '/package-development/system-configuration' }
-        ]
-      },
-      {
-        text: 'Shipping Method Development',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/shipping-method-development/getting-started' },
-          { text: 'Creating Your First Shipping Method', link: '/shipping-method-development/create-your-first-shipping-method' },
-          { text: 'Understanding Carrier Configuration', link: '/shipping-method-development/understanding-carrier-configuration' },
-          { text: 'Understanding Carrier Class', link: '/shipping-method-development/understanding-carrier-class' },
-          { text: 'Understanding System Configuration', link: '/shipping-method-development/understanding-system-configuration' },
-        ]
-      },
-      {
-        text: 'Payment Method Development',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/payment-method-development/getting-started' },
-          { text: 'Creating Your First Payment Method', link: '/payment-method-development/create-your-first-payment-method' },
-          { text: 'Understanding Payment Configuration', link: '/payment-method-development/understanding-payment-configuration' },
-          { text: 'Understanding Payment Class', link: '/payment-method-development/understanding-payment-class' }
-        ]
-      },
-      {
-        text: 'Product Type Development',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/product-type-development/getting-started' },
-          { text: 'Creating Your First Product Type', link: '/product-type-development/create-your-first-product-type' },
-          { text: 'Understanding Product Type Configuration', link: '/product-type-development/understanding-product-type-configuration' },
-          { text: 'Understanding Abstract Type Class', link: '/product-type-development/understanding-abstract-type-class' },
-          { text: 'Building Your Subscription Product Type', link: '/product-type-development/building-your-subscription-product-type' },
-        ]
-      },
-      {
-        text: 'Theme Development',
-        collapsed: false,
-        items: [
-          { text: 'Getting Started', link: '/theme-development/getting-started' },
-          { text: 'Creating Store Theme', link: '/theme-development/creating-store-theme' },
-          { text: 'Creating Admin Theme', link: '/theme-development/creating-admin-theme' },
-          { text: 'Creating Custom Theme Package', link: '/theme-development/creating-custom-theme-package' },
-          { text: 'Vite-Powered Theme Assets', link: '/theme-development/vite-powered-theme-assets' },
-          { text: 'Understanding Layouts', link: '/theme-development/understanding-layouts' },
-          { text: 'Blade Components', link: '/theme-development/blade-components' },
-          { text: 'Email Template', link: '/theme-development/email-template' },
-          { text: 'Validation', link: '/theme-development/validation' }
-        ]
-      },
-      {
-        text: 'Performance',
-        collapsed: false,
-        items: [
-          { text: 'Introduction', link: '/performance/introduction' },
-          { text: 'Configure Elasticsearch', link: '/performance/configure-elasticsearch' },
-          { text: 'Configure Full Page Cache', link: '/performance/configure-fpc' },
-          { text: 'Configure Varnish', link: '/performance/configure-varnish' },
-          { text: 'Configure Laravel Octane', link: '/performance/configure-laravel-octane' },
-          { text: 'Configure Load Balancing', link: '/performance/configure-load-balancing' }
-        ]
-      },
-      {
-        text: 'Digging Deeper',
-        collapsed: false,
-        items: [
-          { text: 'Introduction', link: '/advanced/introduction' },
-          { text: 'Understanding Core Class', link: '/advanced/understanding-core-class' },
-          { text: 'Understanding Indexers', link: '/advanced/understanding-indexers' },
-          { text: 'Understanding Data Transfer', link: '/advanced/understanding-data-transfer' },
-          { text: 'Event Listeners', link: '/advanced/event-listeners' },
-          { text: 'View Render Events', link: '/advanced/view-render-events' }
-        ]
-      },
-      {
         text: 'Bagisto APIs',
         collapsed: false,
         items: [
           { text: 'Introduction', link: '/api/introduction' },
-          { text: 'Rest API', link: '/api/rest-api' },
+          { 
+            text: 'Rest API',
+            collapsed: false,
+            items: [
+              { text: 'Introduction', link: '/api/rest-api/introduction' },
+              { text: 'Authentication', link: '/api/rest-api/authentication' },
+              {
+                text: 'Shop API',
+                collapsed: false,
+                items: [
+                  {
+                    text: 'Locales',
+                    collapsed: false,
+                    items: [ 
+                      { text: 'Get All Locales', link: '/api/rest-api/shop/locales/list' },
+                      { text: 'Get Single Locale', link: '/api/rest-api/shop/locales/single' }
+                    ]
+                  },
+                ]
+              },
+              {
+                text: 'Admin API',
+                collapsed: false,
+                items: [
+                  { text: 'Coming Soon', link: '/api/rest-api/admin-coming-soon' }
+                ]
+              },
+              { text: 'Playground Guide', link: '/api/rest-api/playground' },
+              { text: 'Testing & Debugging', link: '/api/rest-api/testing-debugging' },
+              { text: 'Best Practices', link: '/api/rest-api/best-practices' },
+              { text: 'Integration Guides', link: '/api/rest-api/integrations' },
+            ]
+          },
           {
             text: 'GraphQL API',
+            collapsed: false,
             items: [
               { text: 'Introduction', link: '/api/graphql/introduction' },
               { text: 'Authentication', link: '/api/graphql/authentication' },
@@ -400,43 +323,208 @@ export default defineConfig({
                 text: 'Shop API',
                 collapsed: false,
                 items: [
-                  {
-                    text: 'Queries',
-                    collapsed: true,
-                    items: [
-                      { text: 'Single Attribute', link: '/api/graphql/shop/queries/get-attribute' },
-                      { text: 'Attributes', link: '/api/graphql/shop/queries/get-attributes' },
-                      { text: 'Attribute Options', link: '/api/graphql/shop/queries/get-attribute-options' },
-                      { text: 'Single Category', link: '/api/graphql/shop/queries/get-category' },
-                      { text: 'Categories', link: '/api/graphql/shop/queries/categories' },
-                      { text: 'Tree Categories', link: '/api/graphql/shop/queries/tree-categories' },
-                      { text: 'Single Product', link: '/api/graphql/shop/queries/get-product' },
-                      { text: 'Products', link: '/api/graphql/shop/queries/get-products' },
-                      { text: 'Search Products', link: '/api/graphql/shop/queries/search-products' },
-                      { text: 'Get Cart', link: '/api/graphql/shop/queries/get-cart' },
-                      { text: 'Single Channel', link: '/api/graphql/shop/queries/get-channel' },
-                      { text: 'Channels', link: '/api/graphql/shop/queries/get-channels' },
-                      { text: 'Single Country', link: '/api/graphql/shop/queries/get-country' },
-                      { text: 'Countries', link: '/api/graphql/shop/queries/get-countries' },
-                      { text: 'Country States', link: '/api/graphql/shop/queries/get-country-states' },
-                      { text: 'Country State', link: '/api/graphql/shop/queries/get-country-state' }
-                    ]
-                  },
-                  {
-                    text: 'Mutations',
-                    collapsed: true,
-                    items: [
-                      { text: 'CreateCart', link: '/api/graphql/shop/mutations/create-cart' },
-                      { text: 'AddToCart', link: '/api/graphql/shop/mutations/add-to-cart' },
-                      { text: 'UpdateCartItem', link: '/api/graphql/shop/mutations/update-cart-item' },
-                      { text: 'RemoveCartItem', link: '/api/graphql/shop/mutations/remove-cart-item' },
-                      { text: 'ApplyCoupon', link: '/api/graphql/shop/mutations/apply-coupon' },
-                      { text: 'RegisterCustomer', link: '/api/graphql/shop/mutations/register-customer' },
-                      { text: 'Login', link: '/api/graphql/shop/mutations/login-customer' },
-                      { text: 'CreateOrder', link: '/api/graphql/shop/mutations/create-order' },
-                      { text: 'CreateReview', link: '/api/graphql/shop/mutations/create-review' }
-                    ]
-                  }
+                      {
+                        text: 'Locales',
+                        collapsed: false,
+                        items: [     
+                           {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [               
+                              { text: 'Locales', link: '/api/graphql/shop/locales/queries/locales' },
+                              { text: 'Single Locale', link: '/api/graphql/shop/locales/queries/single-locale' }
+                            ]
+                          }
+                        ]
+                      },                      
+                      {
+                        text: 'Category',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Tree Categories', link: '/api/graphql/shop/queries/tree-categories' },  
+                              { text: 'Categories', link: '/api/graphql/shop/queries/categories' },
+                              { text: 'Single Category', link: '/api/graphql/shop/queries/get-category' },
+                            ]
+                          } 
+                        ]
+                      },
+                      {
+                        text: 'Theme Customisations',
+                        collapsed: false,
+                        items: [                    
+                          { text: 'Theme Customisations', link: '/api/graphql/shop/queries/theme-customisations' },
+                          { text: 'Single Theme Customisation', link: '/api/graphql/shop/queries/single-theme-customisation' }
+                        ]
+                      },
+                      {
+                        text: 'Product',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Products', link: '/api/graphql/shop/queries/get-products' },
+                              { text: 'Search Products', link: '/api/graphql/shop/queries/search-products' },
+                              { text: 'Single Product', link: '/api/graphql/shop/queries/get-product' },
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        text: 'Product Review',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Product Reviews', link: '/api/graphql/shop/queries/get-product-reviews' },
+                            ]
+                          },
+                          {
+                            text: 'Mutations',
+                            collapsed: false,
+                            items: [
+                              { text: 'Create Product Review', link: '/api/graphql/shop/mutations/create-product-review' },
+                              { text: 'Update Product Review', link: '/api/graphql/shop/mutations/update-product-review' },
+                              { text: 'Delete Product Review', link: '/api/graphql/shop/mutations/delete-product-review' },
+
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        text: 'Attribute',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Attributes', link: '/api/graphql/shop/queries/get-attributes' },
+                              { text: 'Single Attribute', link: '/api/graphql/shop/queries/get-attribute' },
+                              { text: 'Attribute Options', link: '/api/graphql/shop/queries/get-attribute-options' },
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        text: 'Channel',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Channels', link: '/api/graphql/shop/queries/get-channels' },
+                              { text: 'Single Channel', link: '/api/graphql/shop/queries/get-channel' },
+                            ]
+                          }
+                        ]
+                      },
+                      { 
+                        text: 'Country',
+                        collapsed: false,
+                        items: [                    
+                          { text: 'Single Country', link: '/api/graphql/shop/queries/get-country' },
+                          { text: 'Countries', link: '/api/graphql/shop/queries/get-countries' },
+                          { text: 'Country States', link: '/api/graphql/shop/queries/get-country-states' },
+                          { text: 'Country State', link: '/api/graphql/shop/queries/get-country-state' }
+                        ]
+                      },  
+                      {
+                        text: 'Customer',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Get Customer Profile', link: '/api/graphql/shop/queries/get-customer-profile' },
+                              { text: 'Get Customer Orders', link: '/api/graphql/shop/queries/get-customer-orders' },
+                              { text: 'Get Customer Addresses', link: '/api/graphql/shop/queries/get-customer-addresses'},
+
+                            ]   
+
+                          },
+                          {
+                            text: 'Mutations',
+                            collapsed: false,
+                            items: [
+                              { text: 'Customer Registration', link: '/api/graphql/shop/mutations/customer-registration' },
+                              { text: 'Customer Login', link: '/api/graphql/shop/mutations/customer-login' },
+                              { text: 'Customer Verify Token', link: '/api/graphql/shop/mutations/customer-verify-token' },
+                              { text: 'Customer Logout', link: '/api/graphql/shop/mutations/customer-logout' },
+                              { text: 'Update Customer Profile', link: '/api/graphql/shop/mutations/update-customer-profile' },
+                              { text: 'Delete Customer Profile', link: '/api/graphql/shop/mutations/delete-customer-profile' },
+                              { text: 'Forgot Password', link: '/api/graphql/shop/mutations/forgot-password' },
+                              { text: 'Reset Password', link: '/api/graphql/shop/mutations/reset-password' },
+                              { text: 'Create Customer Address', link: '/api/graphql/shop/mutations/create-customer-address' },
+                              { text: 'Update Customer Address', link: '/api/graphql/shop/mutations/update-customer-address' },
+                              { text: 'Delete Customer Address', link: '/api/graphql/shop/mutations/delete-customer-address' },
+
+                            ]
+                          }
+                        ]
+                      },    
+                      {
+                        text: 'Cart',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Get Cart', link: '/api/graphql/shop/queries/get-cart' },
+                            ]   
+
+                          },
+                          {
+                            text: 'Mutations',
+                            collapsed: false,
+                            items: [
+                              { text: 'CreateCart', link: '/api/graphql/shop/mutations/create-cart' },
+                              { text: 'AddToCart', link: '/api/graphql/shop/mutations/add-to-cart' },
+                              { text: 'UpdateCartItem', link: '/api/graphql/shop/mutations/update-cart-item' },
+                              { text: 'RemoveCartItem', link: '/api/graphql/shop/mutations/remove-cart-item' },
+                              { text: 'ApplyCoupon', link: '/api/graphql/shop/mutations/apply-coupon' },
+                              { text: 'RemoveCoupon', link: '/api/graphql/shop/mutations/remove-coupon' },
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        text: 'Checkout',
+                        collapsed: true,
+                        items: [
+                          {
+                            text: 'Queries',
+                            collapsed: false,
+                            items: [
+                              { text: 'Get Addresses', link: '/api/graphql/shop/queries/get-addresses' },
+                              { text: 'Get Shipping Methods', link: '/api/graphql/shop/queries/get-shipping-methods' },
+                              { text: 'Get Payment Methods', link: '/api/graphql/shop/queries/get-payment-methods' },
+                            ]
+                          },
+                          {
+                            text: 'Mutations',
+                            collapsed: false,
+                            items: [
+                              { text: 'Set Shipping Address', link: '/api/graphql/shop/mutations/set-shipping-address' },
+                              { text: 'Set Billing Address', link: '/api/graphql/shop/mutations/set-billing-address' },
+                              { text: 'Set Shipping Method', link: '/api/graphql/shop/mutations/set-shipping-method' },
+                              { text: 'Set Payment Method', link: '/api/graphql/shop/mutations/set-payment-method' },
+                              { text: 'Place Order', link: '/api/graphql/shop/mutations/place-order' },
+                            ]
+                          }
+                        ]
+                      },
+                              
                 ]
               },
               {
@@ -447,10 +535,10 @@ export default defineConfig({
                 ]
               },
               { text: 'Playground Guide', link: '/api/graphql/playground' },
+              { text: 'Best Practices', link: '/api/graphql/best-practices' },
               { text: 'Integration Guides', link: '/api/graphql/integrations' },
-              { text: 'Best Practices', link: '/api/graphql/best-practices' }
             ]
-          }
+          },
         ]
       }
     ],

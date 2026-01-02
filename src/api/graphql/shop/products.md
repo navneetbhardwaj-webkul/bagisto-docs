@@ -1,33 +1,16 @@
 # Shop API - Products
 
-The Products API allows you to retrieve, create, update, and manage product information in your Bagisto store.
+The Products API allows you to retrieve and query product information from your Bagisto store using flexible sorting, filtering, search, and pagination options.
 
 ## Overview
 
-Products are the core of your e-commerce store. The Products API provides comprehensive endpoints to manage product data including pricing, attributes, images, and inventory.
+Products are the core of your e-commerce store. This GraphQL API provides comprehensive query capabilities to manage product data including pricing, attributes, images, and filtering with real-world examples.
 
-## Base Resource Object
+---
 
-```json
-{
-  "id": "1",
-  "name": "Awesome Product",
-  "sku": "PROD-001",
-  "type": "simple",
-  "description": "Product description",
-  "shortDescription": "Short desc",
-  "price": 99.99,
-  "cost": 50.00,
-  "weight": 1.5,
-  "status": true,
-  "createdAt": "2024-01-01T00:00:00Z",
-  "updatedAt": "2024-01-01T00:00:00Z"
-}
-```
+## 1️⃣ Basic Product Listing (Price Ascending)
 
-## Get All Products
-
-Retrieve a list of all products in your store with pagination support.
+Retrieve products sorted by price in ascending order with cursor-based pagination.
 
 ```graphql
 query GetProducts(
@@ -38,18 +21,11 @@ query GetProducts(
   $sort: String
 ) {
   products(
-    channel: $channel
+    sortKey: $sortKey
+    reverse: $reverse
     first: $first
-    after: $after
-    search: $search
-    sort: $sort
   ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
+    totalCount
     edges {
       cursor
       node {
@@ -57,9 +33,13 @@ query GetProducts(
         name
         sku
         price
-        status
-        createdAt
+        minimumPrice
+        type
       }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
     }
   }
 }
@@ -68,156 +48,191 @@ query GetProducts(
 **Variables:**
 ```json
 {
-  "channel": "default",
-  "first": 20,
-  "sort": "name"
+  "sortKey": "PRICE",
+  "reverse": false,
+  "first": 20
 }
 ```
 
-**Response:**
-```json
-{
-  "data": {
-    "products": {
-      "pageInfo": {
-        "hasNextPage": true,
-        "endCursor": "cursor-value"
-      },
-      "edges": [
-        {
-          "node": {
-            "id": "1",
-            "name": "Product 1",
-            "sku": "PROD-001",
-            "price": "99.99",
-            "status": true
-          }
-        }
-      ]
-    }
-  }
-}
-```
+---
 
-## Get Product by ID
+## 2️⃣ Search Products by Name or SKU
 
-Retrieve detailed information about a specific product.
+Search for products using text query matching against name and SKU fields.
 
 ```graphql
-query GetProduct($id: String!) {
-  product(id: $id) {
-    id
-    name
-    sku
-    type
-    description
-    shortDescription
-    price
-    cost
-    weight
-    status
-    images {
-      edges {
-        node {
-          id
-          url
-          alt
-          type
-        }
-      }
-    }
-    attributes {
-      edges {
-        node {
-          code
-          label
-          value
-        }
-      }
-    }
-    reviews {
-      edges {
-        node {
-          id
-          rating
-          title
-          comment
-        }
-      }
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "id": "1"
-}
-```
-
-## Get Product by SKU
-
-Retrieve a product using its SKU.
-
-```graphql
-query GetProductBySku($sku: String!) {
-  productBySkU(sku: $sku) {
-    id
-    name
-    sku
-    price
-    description
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "sku": "PROD-001"
-}
-```
-
-## Get Product by URL Key
-
-Retrieve a product using its URL slug.
-
-```graphql
-query GetProductByUrl($url: String!) {
-  productByUrl(url: $url) {
-    id
-    name
-    sku
-    price
-    productFlat {
-      url
-      metaTitle
-      metaDescription
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "url": "awesome-product-name"
-}
-```
-
-## Search Products
-
-Search for products using text search.
-
-```graphql
-query SearchProducts($search: String!, $channel: String!) {
+query SearchProducts(
+  $query: String!
+  $sortKey: String!
+  $first: Int!
+) {
   products(
-    channel: $channel
-    search: $search
-    first: 20
+    query: $query
+    sortKey: $sortKey
+    first: $first
   ) {
     edges {
+      node {
+        id
+        name
+        sku
+      }
+    }
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "query": "shirt",
+  "sortKey": "TITLE",
+  "first": 20
+}
+```
+
+---
+
+## 3️⃣ Filter by Category (ID-based)
+
+Filter products by category using numeric category IDs.
+
+> **📌 Note:** Category IDs must be numeric (e.g., `22`, `23`)
+
+```graphql
+query FilterByCategory(
+  $filter: String!
+  $first: Int!
+) {
+  products(
+    filter: $filter
+    first: $first
+  ) {
+    edges {
+      node {
+        id
+        name
+        sku
+      }
+    }
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "filter": "{\"category_id\":23}",
+  "first": 20
+}
+```
+
+---
+
+## 4️⃣ Filter by Attribute Options (Color & Size)
+
+Filter products by attribute options using their option IDs.
+
+> **📌 Important:** Attribute filters use **option IDs**, not labels
+> * Red → `1`, Green → `2`
+> * Size S → `6`, M → `7`
+
+```graphql
+query FilterByAttributes(
+  $filter: String!
+  $first: Int!
+) {
+  products(
+    filter: $filter
+    first: $first
+  ) {
+    edges {
+      node {
+        id
+        name
+        sku
+      }
+    }
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "filter": "{\"color\":\"1,2\",\"size\":\"6,7\"}",
+  "first": 20
+}
+```
+
+---
+
+## 5️⃣ Filter by Price Range
+
+Filter products within a specific price range.
+
+```graphql
+query FilterByPriceRange(
+  $filter: String!
+  $sortKey: String!
+  $reverse: Boolean!
+  $first: Int!
+) {
+  products(
+    filter: $filter
+    sortKey: $sortKey
+    reverse: $reverse
+    first: $first
+  ) {
+    edges {
+      node {
+        id
+        name
+        price
+      }
+    }
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "filter": "{\"price_from\":800,\"price_to\":2500}",
+  "sortKey": "PRICE",
+  "reverse": false,
+  "first": 20
+}
+```
+
+---
+
+## 6️⃣ Combined Filters (Real-World Example)
+
+Apply multiple filters together: search, category, attributes, price range, sorting, and pagination.
+
+```graphql
+query FilterProductsCombined(
+  $query: String!
+  $filter: String!
+  $sortKey: String!
+  $reverse: Boolean!
+  $locale: String!
+  $channel: String!
+  $first: Int!
+) {
+  products(
+    query: $query
+    filter: $filter
+    sortKey: $sortKey
+    reverse: $reverse
+    locale: $locale
+    channel: $channel
+    first: $first
+  ) {
+    totalCount
+    edges {
+      cursor
       node {
         id
         name
@@ -225,6 +240,10 @@ query SearchProducts($search: String!, $channel: String!) {
         price
       }
     }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
   }
 }
 ```
@@ -232,31 +251,83 @@ query SearchProducts($search: String!, $channel: String!) {
 **Variables:**
 ```json
 {
-  "search": "laptop",
-  "channel": "default"
+  "query": "tshirt",
+  "filter": "{\"category_id\":23,\"color\":\"1\",\"size\":\"7\",\"price_from\":500,\"price_to\":2000}",
+  "sortKey": "PRICE",
+  "reverse": true,
+  "locale": "en",
+  "channel": "default",
+  "first": 20
 }
 ```
 
-## Filter Products
+---
 
-Filter products by various attributes.
+## 7️⃣ Pagination – Next Page (Using `after` Cursor)
+
+Navigate to the next page using the cursor-based pagination with the `after` parameter.
 
 ```graphql
-query FilterProducts(
-  $channel: String!
-  $filters: ProductFilterInput
+query GetProductsNextPage(
+  $sortKey: String!
+  $first: Int!
+  $after: String!
 ) {
   products(
-    channel: $channel
-    first: 20
-    filters: $filters
+    sortKey: $sortKey
+    first: $first
+    after: $after
+  ) {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+```
+
+**Variables:**
+```json
+{
+  "sortKey": "PRICE",
+  "first": 20,
+  "after": "MTI1"
+}
+```
+
+---
+
+## 8️⃣ Pagination – Previous Page (Using `before` + `last`)
+
+Navigate to the previous page using the `before` parameter with `last` for reverse pagination.
+
+```graphql
+query GetProductsPreviousPage(
+  $sortKey: String!
+  $last: Int!
+  $before: String!
+) {
+  products(
+    sortKey: $sortKey
+    last: $last
+    before: $before
   ) {
     edges {
       node {
         id
         name
-        price
       }
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
     }
   }
 }
@@ -265,39 +336,34 @@ query FilterProducts(
 **Variables:**
 ```json
 {
-  "channel": "default",
-  "filters": {
-    "price": {
-      "from": 100,
-      "to": 500
-    },
-    "status": [1],
-    "brand": ["Apple", "Samsung"]
-  }
+  "sortKey": "PRICE",
+  "last": 20,
+  "before": "MTQ0"
 }
 ```
 
-## Sort Products
+---
 
-Sort products by name, price, rating, or date.
+## 9️⃣ Locale & Channel Specific Products
+
+Query products for a specific locale and sales channel.
 
 ```graphql
-query SortProducts(
+query GetProductsByLocaleAndChannel(
+  $locale: String!
   $channel: String!
-  $sort: String!
-  $order: String!
+  $first: Int!
 ) {
   products(
+    locale: $locale
     channel: $channel
-    sort: $sort
-    order: $order
-    first: 20
+    first: $first
   ) {
     edges {
       node {
         id
         name
-        price
+        sku
       }
     }
   }
@@ -307,197 +373,70 @@ query SortProducts(
 **Variables:**
 ```json
 {
+  "locale": "en",
   "channel": "default",
-  "sort": "price",
-  "order": "ASC"
+  "first": 20
 }
 ```
 
-## Get Configurable Product
+---
 
-Retrieve a configurable product with its variants and super attributes.
+## ⚠️ Common Filter Syntax Issues
+
+### ✅ Correct Format (Single-Line JSON String)
 
 ```graphql
-query GetConfigurable($id: String!) {
-  product(id: $id) {
-    id
-    name
-    type
-    variants {
-      edges {
-        node {
-          id
-          sku
-          price
-          attributes {
-            edges {
-              node {
-                code
-                value
-              }
-            }
-          }
-        }
-      }
-    }
-    superAttributes {
-      edges {
-        node {
-          id
-          code
-          label
-          options {
-            edges {
-              node {
-                id
-                label
-                value
-              }
-            }
-          }
-        }
+filter: "{\"color\":\"1,2\",\"size\":\"6\"}"
+```
+
+### ❌ Incorrect (Will Throw `Unterminated string` Error)
+
+```graphql
+filter: "{
+  "color":"1,2"
+}"
+```
+
+The filter parameter must be passed as a **single-line JSON string** with properly escaped quotes. Multi-line filters will cause parsing errors.
+
+---
+
+## 🧠 Best Practice: Using GraphQL Variables
+
+Use GraphQL variables instead of inline filter strings for better maintainability and error handling.
+
+**Query:**
+```graphql
+query getProducts($filter: String!) {
+  products(filter: $filter, first: 20) {
+    edges {
+      node {
+        id
+        name
       }
     }
   }
 }
 ```
 
-## Create Product
-
-Create a new product in your store.
-
-```graphql
-mutation CreateProduct($input: CreateProductInput!) {
-  createProduct(input: $input) {
-    product {
-      id
-      name
-      sku
-      status
-      createdAt
-    }
-  }
-}
-```
-
 **Variables:**
 ```json
 {
-  "input": {
-    "name": "New Product",
-    "sku": "PROD-NEW-001",
-    "type": "simple",
-    "description": "Product description",
-    "price": 99.99,
-    "status": true
-  }
+  "filter": "{\"category_id\":23,\"color\":\"1\",\"size\":\"6\"}"
 }
 ```
 
-## Update Product
+---
 
-Update an existing product.
+## ✅ Quick Reference Summary
 
-```graphql
-mutation UpdateProduct($id: String!, $input: UpdateProductInput!) {
-  updateProduct(id: $id, input: $input) {
-    product {
-      id
-      name
-      price
-      updatedAt
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "id": "1",
-  "input": {
-    "name": "Updated Product Name",
-    "price": 119.99,
-    "status": true
-  }
-}
-```
-
-## Delete Product
-
-Delete a product from your store.
-
-```graphql
-mutation DeleteProduct($id: String!) {
-  deleteProduct(id: $id) {
-    status
-    message
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "id": "1"
-}
-```
-
-## Add Product Image
-
-Add an image to a product.
-
-```graphql
-mutation AddProductImage($input: AddProductImageInput!) {
-  addProductImage(input: $input) {
-    image {
-      id
-      url
-      type
-    }
-  }
-}
-```
-
-## Delete Product Image
-
-Remove an image from a product.
-
-```graphql
-mutation DeleteProductImage($input: DeleteProductImageInput!) {
-  deleteProductImage(input: $input) {
-    status
-    message
-  }
-}
-```
-
-## Bulk Update Products
-
-Update multiple products at once.
-
-```graphql
-mutation BulkUpdate($productIds: [String!]!, $updates: BulkUpdateInput!) {
-  bulkUpdateProducts(
-    productIds: $productIds
-    updates: $updates
-  ) {
-    status
-    updatedCount
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "productIds": ["1", "2", "3"],
-  "updates": {
-    "status": true,
-    "weight": 1.5
-  }
-}
-```
+* **Attribute filters** use option IDs, not labels
+* **Category filter** uses numeric category ID
+* **Price filters** use `price_from` and `price_to` parameters
+* **Pagination** is cursor-based with `first`, `last`, `after`, and `before`
+* **Filter parameter** must be a single-line JSON string with escaped quotes
+* **Sort key** options: `PRICE`, `TITLE`, `NEWEST`, `BEST_SELLING`
+* **Reverse parameter** controls sort direction (true = descending, false = ascending)
 
 ---
 

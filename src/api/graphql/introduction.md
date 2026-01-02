@@ -16,7 +16,9 @@ GraphQL is a query language and runtime that allows clients to request exactly t
 
 ## Architecture Overview
 
-Bagisto's GraphQL API is built on **Laravel Lighthouse** and provides two distinct API layers:
+Bagisto's GraphQL API is built on **API Platform for Laravel**, a powerful framework that provides robust GraphQL support out of the box. This architecture enables a modern, type-safe API layer with minimal configuration.
+
+Bagisto's GraphQL API is built using the **Platforma API Laravel plugin** with **Bagisto's GraphQL plugin**, providing two distinct API layers:
 
 ### 🛍️ Shop API (Frontend)
 The public-facing API for customer-facing operations:
@@ -36,65 +38,21 @@ The administrative API for management operations:
 - Reports and analytics
 
 ## Quick Start
-
-### 1. Installation
-
-```bash
-# Install the GraphQL API package
-composer require bagisto/graphql-api
-```
-
-### 2. Configure Middleware
-
-Update your `bootstrap/app.php`:
-
-```php
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-
-return Application::configure(basePath: dirname(__DIR__))
-   ->withMiddleware(function (Middleware $middleware) {
-      // Remove session and cookie middleware from web group
-      $middleware->removeFromGroup('web', [
-         StartSession::class, 
-         AddQueuedCookiesToResponse::class
-      ]);
-
-      // Add globally for GraphQL routes
-      $middleware->append([
-         StartSession::class, 
-         AddQueuedCookiesToResponse::class
-      ]);
-   });
-```
-
-### 3. Access the Playground
+ 
+### Access the Playground
 
 Two ways to explore the API:
 
-**Interactive GraphiQL Playground:**
+**Interactive GraphQL Playground:**
 ```
-https://your-domain.com/api/graphiql
+https://your-domain.com/api/graphql
 ```
-
-**Apollo Sandbox (Alternative):**
-```
-https://your-domain.com/api/sandbox
-```
-
-Both playgrounds provide:
-- Live query execution
-- Schema documentation
-- Query validation
-- Error reporting
 
 ## API Endpoints
 
 | Endpoint | Purpose | Authentication |
 |----------|---------|-----------------|
 | `/api/graphql` | Main GraphQL endpoint | Optional (Shop APIs) / Required (Admin APIs) |
-| `/api/graphiql` | Interactive playground | None |
-| `/api/sandbox` | Apollo Sandbox UI | None |
 
 ## Authentication Methods
 
@@ -264,7 +222,7 @@ All GraphQL responses follow a consistent format:
 | `Content-Type` | Request format | `application/json` |
 | `Accept-Language` | Locale/Language | `en_US` or `fr_FR` |
 
-## Rate Limiting
+<!-- ## Rate Limiting
 
 API requests are rate-limited to prevent abuse:
 
@@ -278,7 +236,7 @@ Rate limit information is included in response headers:
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 999
 X-RateLimit-Reset: 1702000000
-```
+``` -->
 
 ## Pagination
 
@@ -325,7 +283,4 @@ Parameters:
 - 💬 [Community Forum](https://forums.bagisto.com)
 - 🐛 [Issue Tracker](https://github.com/bagisto/bagisto/issues)
 - 📧 [Contact Support](https://bagisto.com/en/contacts/)
-
 ---
-
-**Ready to build?** Start with the [Shop API Reference](/api/graphql/shop-api) or jump to [Integration Guides](/api/graphql/integrations) for your preferred language.
