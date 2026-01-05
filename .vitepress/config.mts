@@ -64,181 +64,7 @@ export default defineConfig({
   lang: 'en-US',
   title: "Bagisto",
   description: "Bagisto Developer Documentation",
-  cleanUrls: true,
-  ssr: false,
-
-  markdown: {
-    config: (md: any) => {
-      // Get the original fence renderer
-      const originalFence = md.renderer.rules.fence
-
-      // Add block rule for tabs - must be before 'paragraph'
-      md.block.ruler.before(
-        'paragraph',
-        'tabs',
-        function (state: any) {
-          const pos = state.bMarks[state.line] + state.tShift[state.line]
-          const maximum = state.eMarks[state.line]
-
-          // Check if line starts with :::tabs
-          const lineText = state.src.slice(pos, maximum).trim()
-          if (!lineText.startsWith(':::tabs')) return false
-
-          const startLine = state.line
-          let endLine = state.line + 1
-          const lineMax = state.lineMax
-
-          // Find closing :::
-          while (endLine < lineMax) {
-            const nextPos = state.bMarks[endLine] + state.tShift[endLine]
-            const nextMax = state.eMarks[endLine]
-            const nextLine = state.src.slice(nextPos, nextMax).trim()
-
-            if (nextLine === ':::') {
-              break
-            }
-            endLine++
-          }
-
-          if (endLine >= lineMax) {
-            return false
-          }
-
-          // Extract content between :::tabs and :::
-          let tabsContent = ''
-          for (let i = startLine + 1; i < endLine; i++) {
-            const itemPos = state.bMarks[i] + state.tShift[i]
-            const itemMax = state.eMarks[i]
-            tabsContent += state.src.slice(itemPos, itemMax) + '\n'
-          }
-
-          // Parse tabs
-          const tabs = parseTabsContent(tabsContent)
-
-          if (tabs.length === 0) {
-            return false
-          }
-
-          // Create token
-          const token = state.push('tabs_block', 'div', 0)
-          token.meta = { tabs: tabs, originalFence: originalFence }
-          token.map = [startLine, endLine + 1]
-
-          state.line = endLine + 1
-          return true
-        }
-      )
-
-      // Add renderer for tabs
-      md.renderer.rules.tabs_block = function (tokens: any[], idx: any) {
-        const tabs = tokens[idx].meta.tabs
-        const originalFence = tokens[idx].meta.originalFence
-
-        let html = '<div class="code-tabs-container">'
-        
-        // Tab header with filters and buttons
-        html += '<div class="tabs-header">'
-        html += '<div class="tabs-buttons-row">'
-        
-        tabs.forEach((tab: any, i: number) => {
-          html += `<button class="code-tab ${i === 0 ? 'active' : ''}" data-tab-index="${i}" data-language="${tab.label}" onclick="window.__switchTab(this, ${i})">`
-          html += `${tab.label}`
-          html += '</button>'
-        })
-        
-        html += '</div>'
-        
-        // Action buttons (top right)
-        html += '<div class="tabs-actions">'
-        html += '<button class="btn-copy" title="Copy code" aria-label="Copy code"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H10C10.8284 1.5 11.5 2.1716 11.5 3V9C11.5 9.8284 10.8284 10.5 10 10.5H4C3.1716 10.5 2.5 9.8284 2.5 9V3C2.5 2.1716 3.1716 1.5 4 1.5Z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M6 5.5H12C12.8284 5.5 13.5 6.1716 13.5 7V13C13.5 13.8284 12.8284 14.5 12 14.5H6C5.1716 14.5 4.5 13.8284 4.5 13V7C4.5 6.1716 5.1716 5.5 6 5.5Z" fill="currentColor" stroke="none"/></svg></button>'
-        html += '<button class="btn-graphiql" title="Try in GraphiQL" aria-label="Try in GraphiQL"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><polygon points="3 2 13 8 3 14"/></svg></button>'
-        html += '<button class="btn-description" title="Show description" aria-label="Show description"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="4" r="0.8" fill="currentColor"/><line x1="8" y1="6" x2="8" y2="11" stroke="currentColor" stroke-width="1"/></svg></button>'
-        html += '</div>'
-        
-        html += '</div>'
-        
-        // Content area
-        html += '<div class="tabs-content-wrapper">'
-        
-        // Description toggle
-        html += '<div class="description-panel" style="display:none;">'
-        html += '<p>Click any language tab to see code examples in that language.</p>'
-        html += '</div>'
-        
-        // Tab content - render each code block using the original fence renderer
-        tabs.forEach((tab: any, i: number) => {
-          const langClass = getLanguageClass(tab.label)
-          
-          let highlighted: string
-          try {
-            // Use the original fence renderer function - pass markdown instance as context
-            highlighted = originalFence.call(md.renderer, [{ type: 'fence', tag: 'code', content: tab.code, info: langClass, markup: '```', block: true, nesting: 0, level: 0 }], 0, {}, {}, md)
-          } catch (e) {
-            // Fallback
-            highlighted = `<pre><code class="language-${langClass}">${escapeHtml(tab.code)}</code></pre>`
-          }
-          
-          html += `<div class="tab-content ${i === 0 ? 'active' : ''}" data-tab-index="${i}" data-language="${tab.label}">`
-          html += highlighted
-          html += '</div>'
-        })
-        
-        html += '</div>'
-        html += '</div>'
-        
-        return html
-      }
-
-      // Add block rule for examples-selector
-      md.block.ruler.before(
-        'paragraph',
-        'examples_selector',
-        function (state: any) {
-          const pos = state.bMarks[state.line] + state.tShift[state.line]
-          const maximum = state.eMarks[state.line]
-
-          // Check if line starts with :::examples-selector
-          const lineText = state.src.slice(pos, maximum).trim()
-          if (!lineText.startsWith(':::examples-selector')) return false
-
-          const startLine = state.line
-          let endLine = state.line + 1
-          const lineMax = state.lineMax
-
-          // Find closing :::
-          while (endLine < lineMax) {
-            const nextPos = state.bMarks[endLine] + state.tShift[endLine]
-            const nextMax = state.eMarks[endLine]
-            const nextLine = state.src.slice(nextPos, nextMax).trim()
-
-            if (nextLine === ':::') {
-              break
-            }
-            endLine++
-          }
-
-          if (endLine >= lineMax) {
-            return false
-          }
-
-          // Create token
-          const token = state.push('examples_selector_block', 'div', 0)
-          token.meta = {}
-          token.map = [startLine, endLine + 1]
-
-          state.line = endLine + 1
-          return true
-        }
-      )
-
-      // Add renderer for examples-selector
-      md.renderer.rules.examples_selector_block = function (tokens: any[], idx: any) {
-        // This will be rendered as a Vue component placeholder
-        return '<ExamplesSelector />'
-      }
-    }
-  },
-
+  
   vite: {
     server: {
       host: '0.0.0.0'
@@ -523,8 +349,7 @@ export default defineConfig({
                             ]
                           }
                         ]
-                      },
-                              
+                      },                              
                 ]
               },
               {
@@ -582,11 +407,5 @@ export default defineConfig({
       fs.writeFileSync(filePath, makeRedirectHtml(to), 'utf-8')
       console.log(`✅ Redirect created: ${from} -> ${to}`)
     })
-  },
-
-  build: {
-    rollupOptions: {
-      // Add any build options here
-    }
   }
-} as any)
+})
