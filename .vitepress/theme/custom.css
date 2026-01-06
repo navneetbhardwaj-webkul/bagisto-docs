@@ -501,19 +501,28 @@
   width: 100%;
 }
 
-/* Force aside container to 350px only for API pages */
-.aside-container{
+/* Ensure ExamplesPanel takes full width */
+.examples-sidebar {
+  width: 100% !important;
+} 
+
+.aside-container.has-examples .aside-container {
   width: 350px !important;
   max-width: 350px !important;
 }
 
-
-/* Ensure ExamplesPanel takes full width */
-.examples-sidebar {
-  width: 100% !important;
+.aside-container.has-examples .content {
+  min-width: 540px !important;
 }
 
-/* Increase aside width globally for examples */
-.VPSidebar {
-  --sidebar-width: 550px;
+.aside-container.has-examples .aside {
+  max-width: 400px !important;
+}
+
+
+/* Add smooth transitions for layout changes */
+.aside-container,
+.content,
+.aside {
+  transition: width 0.3s ease, max-width 0.3s ease, min-width 0.3s ease;
 }
