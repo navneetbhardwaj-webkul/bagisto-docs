@@ -5,41 +5,37 @@ examples:
     title: Customer Login
     description: Authenticate a customer with email and password.
     query: |
-      mutation customerLogin($input: CustomerLoginInput!) {
-        customerLogin(input: $input) {
-          customer {
+      mutation customerLogin($input: createCustomerLoginInput!) {
+        createCustomerLogin(input: $input) {
+          customerLogin {
             id
-            firstName
-            lastName
-            email
+            _id
+            apiToken
+            token
+            message
+            success
           }
-          accessToken
-          refreshToken
-          message
-          success
         }
       }
     variables: |
       {
         "input": {
           "email": "john.doe@example.com",
-          "password": "SecurePassword123!"
+          "password": "SecurePass@123"
         }
       }
     response: |
       {
         "data": {
-          "customerLogin": {
-            "customer": {
+          "createCustomerLogin": {
+            "customerLogin": {
               "id": "1",
-              "firstName": "John",
-              "lastName": "Doe",
-              "email": "john.doe@example.com"
-            },
-            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-            "message": "Customer logged in successfully",
-            "success": true
+              "_id": 1,
+              "apiToken": "k0qai81TSMEKjzvjTfVozwu1cJiZFocQWa0TSDyHzULF5Wml4fTPpbRUg400BAMMZcqKucoGWkOD30F4",
+              "token": "1|uBBNWI06iuca83vMidTSaNTvjrxqM9Si9EJB0iPo5ccb21c1",
+              "message": "You have logged in successfully",
+              "success": true
+            }
           }
         }
       }
@@ -60,34 +56,76 @@ Authenticate a customer account with email and password.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `customer` | Customer | The authenticated customer object |
-| `accessToken` | String | JWT token for API authentication |
-| `refreshToken` | String | Token to refresh access token |
+| `id` | String | API customer resource ID |
+| `_id` | Integer | Customer database ID |
+| `apiToken` | String | API authentication token |
+| `token` | String | Customer session token |
 | `message` | String | Success or error message |
 | `success` | Boolean | Login success status |
 
 ## Token Usage
 
-Once logged in, use the `accessToken` in the `Authorization` header for authenticated requests:
+Once logged in, use the `apiToken` or `token` in the `Authorization` header for authenticated requests:
 
 ```
-Authorization: Bearer <accessToken>
+Authorization: Bearer <token>
 ```
 
 ## Error Responses
 
+**Invalid Email or Password (200):**
 ```json
 {
-  "errors": {
-    "email": ["These credentials do not match our records."]
+  "data": {
+    "createCustomerLogin": {
+      "customerLogin": {
+        "id": "0",
+        "_id": 0,
+        "apiToken": "",
+        "token": "",
+        "message": "Invalid email or password",
+        "success": false
+      }
+    }
   }
 }
 ```
 
-## Token Expiration
+**Account Suspended (200):**
+```json
+{
+  "data": {
+    "createCustomerLogin": {
+      "customerLogin": {
+        "id": "0",
+        "_id": 0,
+        "apiToken": "",
+        "token": "",
+        "message": "Your account has been suspended",
+        "success": false
+      }
+    }
+  }
+}
+```
 
-- `accessToken` expires after a configurable period (typically 1 hour)
-- Use `refreshToken` to obtain a new `accessToken` without re-authenticating
+**Missing Fields (400):**
+```json
+{
+  "errors": [
+    {
+      "message": "The email field is required."
+    }
+  ]
+}
+```
+
+## Token Details
+
+- `apiToken`: Long-lived API authentication token
+- `token`: Session token for immediate use
+- Both tokens can be used in the `Authorization: Bearer` header
+- Tokens expire after a configurable period (typically 24 hours)
 
 ## Related Documentation
 

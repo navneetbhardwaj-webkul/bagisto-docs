@@ -4,6 +4,7 @@ import { redirects, makeRedirectHtml } from './_redirects'
 import fs from 'fs'
 // @ts-ignore
 import path from 'path'
+import { loadEnv } from 'vite'
 
 // Helper: Escape HTML special characters
 function escapeHtml(text: string): string {
@@ -59,7 +60,11 @@ function parseTabsContent(content: string): Array<{ label: string; code: string 
   return tabs
 }
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => {
+  // Load env variables
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
   ignoreDeadLinks: true,
   lang: 'en-US',
   title: "Bagisto",
@@ -68,6 +73,9 @@ export default defineConfig({
   vite: {
     server: {
       host: '0.0.0.0'
+    },
+    define: {
+      'import.meta.env.VITE_GRAPHQL_ENDPOINT': JSON.stringify(env.VITE_GRAPHQL_ENDPOINT)
     }
   },
 
@@ -124,6 +132,27 @@ export default defineConfig({
                       { text: 'Get Single Locale', link: '/api/rest-api/shop/locales/single' }
                     ]
                   },
+                  {
+                        text: 'Customer',
+                        collapsed: false,
+                        items: [
+                              { text: 'Customer Registration', link: '/api/rest-api/shop/customers/customer-registration' },
+                              { text: 'Customer Login', link: '/api/rest-api/shop/customers/customer-login' },
+                              // { text: 'Get Customer Profile', link: '/api/graphql/shop/queries/get-customer-profile' },
+                              // { text: 'Get Customer Orders', link: '/api/graphql/shop/queries/get-customer-orders' },
+                              // { text: 'Get Customer Addresses', link: '/api/graphql/shop/queries/get-customer-addresses'}, 
+                              
+                              // { text: 'Customer Verify Token', link: '/api/graphql/shop/mutations/customer-verify-token' },
+                              // { text: 'Customer Logout', link: '/api/graphql/shop/mutations/customer-logout' },
+                              // { text: 'Update Customer Profile', link: '/api/graphql/shop/mutations/update-customer-profile' },
+                              // { text: 'Delete Customer Profile', link: '/api/graphql/shop/mutations/delete-customer-profile' },
+                              // { text: 'Forgot Password', link: '/api/graphql/shop/mutations/forgot-password' },
+                              // { text: 'Reset Password', link: '/api/graphql/shop/mutations/reset-password' },
+                              // { text: 'Create Customer Address', link: '/api/graphql/shop/mutations/create-customer-address' },
+                              // { text: 'Update Customer Address', link: '/api/graphql/shop/mutations/update-customer-address' },
+                              // { text: 'Delete Customer Address', link: '/api/graphql/shop/mutations/delete-customer-address' },
+                        ]
+                      },    
                 ]
               },
               {
@@ -407,5 +436,6 @@ export default defineConfig({
       fs.writeFileSync(filePath, makeRedirectHtml(to), 'utf-8')
       console.log(`✅ Redirect created: ${from} -> ${to}`)
     })
+  }
   }
 })

@@ -2,6 +2,63 @@
 
 The Shop API provides comprehensive endpoints for customer-facing e-commerce operations. This resource covers product browsing, catalog management, and basic shop information.
 
+## Authentication
+
+All Shop API endpoints require the `X-STOREFRONT-KEY` header for authentication.
+
+### Getting Your Storefront Key
+
+To use the Shop APIs, you need a Storefront Key. Generate one using the Artisan command:
+
+```bash
+php artisan bagisto-api:generate-key --name="Web Storefront"
+```
+
+This will output a key in the format: `pk_storefront_xxxxx`
+
+### Headers Required
+
+All requests must include:
+```
+X-STOREFRONT-KEY: pk_storefront_xxxxx
+Content-Type: application/json
+```
+
+### Rate Limiting
+
+- **Default limit**: 100 requests per minute per key
+- **Response headers**: Each response includes rate limit information
+  - `X-RateLimit-Limit`: Total requests allowed
+  - `X-RateLimit-Remaining`: Remaining requests this minute
+  - `X-RateLimit-Reset`: Unix timestamp when limit resets
+
+### Error Responses
+
+**401 - Missing Key**
+```json
+{
+  "message": "X-STOREFRONT-KEY header is required",
+  "error": "missing_key"
+}
+```
+
+**403 - Invalid Key**
+```json
+{
+  "message": "Invalid storefront key",
+  "error": "invalid_key"
+}
+```
+
+**429 - Rate Limit Exceeded**
+```json
+{
+  "message": "Rate limit exceeded",
+  "error": "rate_limit_exceeded",
+  "retry_after": 35
+}
+```
+
 ## Products
 
 ### List Products
@@ -11,6 +68,12 @@ Retrieve a paginated collection of products.
 **Endpoint:**
 ```
 GET /api/shop/products
+```
+
+**Headers:**
+```
+X-STOREFRONT-KEY: pk_storefront_xxxxx
+Content-Type: application/json
 ```
 
 **Parameters:**
@@ -25,7 +88,8 @@ GET /api/shop/products
 
 ```bash
 curl -X GET "https://your-domain.com/api/shop/products?page=1&itemsPerPage=10" \
-  -H "Content-Type: application/json"
+  -H "Content-Type: application/json" \
+  -H "X-STOREFRONT-KEY: pk_storefront_xxxxx"
 ```
 
 == Node.js
@@ -34,7 +98,8 @@ curl -X GET "https://your-domain.com/api/shop/products?page=1&itemsPerPage=10" \
 const response = await fetch('https://your-domain.com/api/shop/products?page=1&itemsPerPage=10', {
   method: 'GET',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'X-STOREFRONT-KEY': 'pk_storefront_xxxxx'
   }
 });
 
@@ -50,7 +115,10 @@ import requests
 response = requests.get(
     'https://your-domain.com/api/shop/products',
     params={'page': 1, 'itemsPerPage': 10},
-    headers={'Content-Type': 'application/json'}
+    headers={
+        'Content-Type': 'application/json',
+        'X-STOREFRONT-KEY': 'pk_storefront_xxxxx'
+    }
 )
 
 data = response.json()
@@ -69,7 +137,8 @@ $response = $client->request('GET', 'https://your-domain.com/api/shop/products',
         'itemsPerPage' => 10
     ],
     'headers' => [
-        'Content-Type' => 'application/json'
+        'Content-Type' => 'application/json',
+        'X-STOREFRONT-KEY' => 'pk_storefront_xxxxx'
     ]
 ]);
 

@@ -4,21 +4,30 @@
       <GoogleTranslate v-if="isClient" />
     </template>
     <template #aside-bottom>
-      <ExamplesPanel v-if="isClient && pageExamples.length" :examples="pageExamples" />
+      <GraphQLExamplesPanel v-if="isClient && pageExamples.length && isGraphQL" :examples="pageExamples" />
+      <RestExamplesPanel v-if="isClient && pageExamples.length && !isGraphQL" :examples="pageExamples" />
     </template>
   </Layout>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
 import { useRoute } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import GoogleTranslate from './components/GoogleTranslate.vue'
-import ExamplesPanel from './components/ExamplesPanel.vue'
+import GraphQLExamplesPanel from './components/GraphQLExamplesPanel.vue'
+import RestExamplesPanel from './components/RestExamplesPanel.vue'
 const { Layout } = DefaultTheme
 const route = useRoute()
 const pageExamples = ref([])
 const isClient = ref(false)
+
+const isGraphQL = computed(() => {
+  if (pageExamples.value.length === 0) return false
+  // Check if first example has 'query' field (GraphQL) or 'request'/'curl' field (REST)
+  const firstExample = pageExamples.value[0]
+  return 'query' in firstExample
+})
 
 // Function to check and update the aside container styles
 const updateAsideStyles = () => {
@@ -61,13 +70,9 @@ const updateAsideStyles = () => {
   }
 }
 
-onMounted(() => {
-  
+onMounted(() => {  
   isClient.value = true
-
   loadExamples()
-   
-  updateAsideStyles()
 })
 
 function loadExamples() {
@@ -82,8 +87,11 @@ function loadExamples() {
 
 watch(() => route.path, () => {
   loadExamples()
-  setTimeout(() => {
-    updateAsideStyles()
-  }, 100)
 })
+
+watch(pageExamples, async () => {
+  await nextTick()   // wait for DOM update
+  updateAsideStyles()
+}, { immediate: true })
+
 </script>

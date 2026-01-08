@@ -42,9 +42,6 @@
                 <button class="btn-copy-section" :class="{ copied: copiedButton === 'request' }" :title="copiedButton === 'request' ? 'Copied!' : 'Copy code'" @click="copyCode('request')">
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H10C10.8284 1.5 11.5 2.1716 11.5 3V9C11.5 9.8284 10.8284 10.5 10 10.5H4C3.1716 10.5 2.5 9.8284 2.5 9V3C2.5 2.1716 3.1716 1.5 4 1.5Z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M6 5.5H12C12.8284 5.5 13.5 6.1716 13.5 7V13C13.5 13.8284 12.8284 14.5 12 14.5H6C5.1716 14.5 4.5 13.8284 4.5 13V7C4.5 6.1716 5.1716 5.5 6 5.5Z" fill="currentColor" stroke="none"/></svg>
                 </button>
-                <button class="btn-test-swagger" title="Try in Swagger UI" @click="openSwagger">
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><polygon points="3 2 13 8 3 14"/></svg>
-                </button>
               </div>
               <pre><code v-html="getLanguageCode()"></code></pre>
             </div>
