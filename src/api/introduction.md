@@ -43,23 +43,14 @@ The Bagisto GraphQL API enables flexible, efficient data fetching with a single 
 GraphQL is perfect for modern frontend frameworks like React, Vue, and React Native. Check out our [GraphQL API Guide](./graphql-api) to get started.
 :::
 
-## Installation
-
-```bash
-# Install the Bagisto API package
-composer require bagisto/bagisto-api
-```
-
-## Authentication
-
-Both APIs use secure authentication methods:
-
-- **REST API**: Laravel Sanctum with token-based authentication
-- **GraphQL API**: Session-based authentication with CSRF protection
-
 ## What's Next?
 
 Ready to start building? Choose your preferred API approach:
 
-- 📚 [REST API Documentation](./rest-api) - Traditional RESTful endpoints
-- ⚡ [GraphQL API Documentation](./graphql-api) - Modern query language
+- 🔗 [REST API Guide](./rest-api/introduction.html) - RESTful API for traditional integrations
+- ⚡ [GraphQL API Guide](./graphql-api/introduction.html) - Modern GraphQL for flexible queries
+- 📚 [Installation](./setup) - Installation and setup
+- 🔐 [Authentication](./authentication) - Authentication methods
+- 📊 [Rate Limiting](./rate-limiting) - Understanding API rate limits
+- 🚀 [Integration Guides](./integrations) - Real-world integration examples
+

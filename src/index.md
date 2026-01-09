@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "Bagisto API Documentation"
-  text: "REST & GraphQL API."
-  tagline: "Explore Bagisto’s API reference"
+  text: "GraphQL & REST APIs"
+  tagline: "Complete API reference for Bagisto integration"
   actions:
     - theme: brand
       text: Get Started →
@@ -18,28 +18,28 @@ hero:
     alt: Bagisto
 
 features:
-  - title: REST API
-    details: Explore powerful REST endpoints for managing products, orders, customers, and more. Easy to integrate with any application.
-    icon: 🔗
-    link: /api/rest-api
   - title: GraphQL API
-    details: Query exactly the data you need with our flexible GraphQL API. Perfect for modern frontend applications and mobile apps.
+    details: Query exactly the data you need with a flexible GraphQL API. Perfect for modern frontend applications, mobile apps, and optimized API consumption.
     icon: ⚙️
-    link: /api/graphql/introduction
+    link: /api/graphql-api/introduction
+  - title: REST API
+    details: Explore comprehensive REST endpoints for managing products, orders, customers, categories, and more. Easy integration with any programming language or framework.
+    icon: 🔗
+    link: /api/rest-api/introduction
   - title: Authentication
-    details: Secure your API requests with token-based authentication and understand OAuth 2.0 integration methods.
+    details: Secure your API requests with token-based authentication. Learn about Bearer tokens, Storefront API keys, and Laravel Sanctum integration for public, customer, and admin APIs.
     icon: 🔐
-    link: /api/graphql/authentication
-  - title: Shop API
-    details: Access product catalogs, manage shopping carts, process checkouts, and handle customer accounts through powerful shop endpoints.
-    icon: 🛒
-    link: /api/graphql/introduction
-  - title: Admin API
-    details: Manage products, orders, customers, and business operations with comprehensive admin API endpoints.
-    icon: 📊
-    link: /api/graphql/admin-coming-soon
+    link: /api/authentication
+  - title: Setup & Configuration
+    details: Complete installation guide for Bagisto APIs. Choose between Quick Setup or Manual Installation, configure environment variables, verify installation, and troubleshoot common issues.
+    icon: 🛠️
+    link: /api/setup
+  - title: Storefront Key Management
+    details: Generate, rotate, and manage your API keys securely. Monitor key usage, set rate limits, and implement security best practices for production environments.
+    icon: 🔑
+    link: /api/storefront-api-key-management-guide
   - title: Integration Guides
-    details: Best practices and examples for integrating Bagisto APIs with your application architecture.
+    details: Best practices, real-world examples, and step-by-step guides for integrating Bagisto APIs into your application architecture.
     icon: 📚
-    link: /api/graphql/integrations
+    link: /api/integrations
 ---
